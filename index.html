@@ -4,8 +4,13 @@
 <meta charset="UTF-8">
 <title>Character Turnaround</title>
 <style>
+/* ===== BODY & BACKGROUND ===== */
 body {
-  background: #a25647;
+  background: 
+    linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0) 20%),
+    linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.4) 100%),
+    #a25647;
+  background-blend-mode: overlay;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,6 +22,7 @@ body {
   transition: background 0.5s ease;
 }
 
+/* ===== CONTAINER ===== */
 .container {
   position: relative;
   display: flex;
@@ -24,15 +30,61 @@ body {
   align-items: center;
 }
 
-#shadow {
+/* ===== CHARACTER TITLE ===== */
+#charName {
   position: absolute;
+  top: -30px; 
+  font-size: 32px; 
+  font-weight: 800;
+  color: white;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+  z-index: 5;
+  text-align: center;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .6s ease, transform .6s ease;
   pointer-events: none;
-  z-index: 1;
-  bottom: 15%;
-  left: 50%;
-  transform: translateX(var(--shadow-offset, -50%));
+}
+#charName.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
+/* ===== EFFECT CLASSES ===== */
+.effect-rainbow {
+  background: linear-gradient(90deg, #ff004c, #ffb800, #2cff72, #00e5ff, #8a2be2, #ff004c);
+  background-size: 400% 100%;
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  animation: moveGradient 4s linear infinite;
+}
+@keyframes moveGradient { 0%{background-position:0% 0} 100%{background-position:400% 0} }
+
+.effect-glitch {
+  animation: glitchShift .6s infinite steps(2);
+}
+@keyframes glitchShift {
+  0%   { text-shadow: 2px 0 #ff004c, -2px 0 #00e5ff; }
+  50%  { text-shadow: -2px 0 #ff004c, 2px 0 #00e5ff; }
+  100% { text-shadow: 2px 0 #ff004c, -2px 0 #00e5ff; }
+}
+
+.effect-flicker { animation: flicker 1.2s infinite; }
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 80%, 100% { opacity: 1; }
+  20%, 22%, 24% { opacity: .6; }
+  81% { opacity: .85; }
+}
+
+.effect-shadowPulse { animation: shadowPulse 1.4s ease-in-out infinite; }
+@keyframes shadowPulse {
+  0%,100% { text-shadow: 0 0 6px rgba(255,255,255,.6), 0 0 18px rgba(255,255,255,.3); }
+  50% { text-shadow: 0 0 12px rgba(255,255,255,.9), 0 0 28px rgba(255,255,255,.5); }
+}
+
+/* ===== CHARACTER ===== */
 #character {
   object-fit: contain;
   z-index: 2;
@@ -43,6 +95,7 @@ body {
   filter: drop-shadow(0 0 15px #fff) drop-shadow(0 0 30px #fff);
 }
 
+/* ===== BUTTONS ===== */
 #buttons {
   margin-top: 20px;
   display: flex;
@@ -72,20 +125,29 @@ button {
   cursor: pointer;
   z-index: 4;
 }
+.arrowBtn.left { left: 5vw; }
+.arrowBtn.right { right: 5vw; }
 
-.arrowBtn.left {
-  left: 5vw;
-}
-
-.arrowBtn.right {
-  right: 5vw;
+/* ===== LOGOS ===== */
+#topLogo {
+  width: 350px;
+  position: absolute;
+  top: -80px;
+  z-index: 6;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 #logo {
-  margin-top: 50px;
   width: 320px;
+  position: absolute;
+  bottom: -50px;
+  z-index: 6;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
+/* ===== SNOW CANVAS ===== */
 .snowCanvas {
   position: fixed;
   top: 0;
@@ -102,7 +164,7 @@ button {
 <canvas class="snowCanvas" id="snowCanvas"></canvas>
 
 <div class="container">
-  <img id="shadow" src="" alt="Shadow">
+  <div id="charName"></div>
   <img id="character" src="" alt="Character">
 
   <div id="buttons">
@@ -111,113 +173,36 @@ button {
     <button id="paintBtn">🎨</button>
   </div>
 
-  <img id="logo" src="https://i.postimg.cc/Jhbq2Yzd/power2f.png" alt="Logo">
+  <img id="topLogo" src="https://i.postimg.cc/J4jjNvTq/memspin1.png" alt="Top Logo">
+  <img id="logo" src="https://i.postimg.cc/Jhbq2Yzd/power2f.png" alt="Bottom Logo">
 </div>
 
 <button class="arrowBtn left" id="prevChar">⬅️</button>
 <button class="arrowBtn right" id="nextChar">➡️</button>
 
 <script>
-// Characters array
+const FORCE_UPPERCASE = true;
+const ENABLE_TITLE_EFFECTS = true;
+const EFFECTS_POOL = ["effect-rainbow","effect-glitch","effect-flicker","effect-shadowPulse"];
+
 const characters = [
-  {
-    name: "Billie",
-    frames: [
-      "https://i.postimg.cc/0Nnd1g1C/UnoRe.png",
-      "https://i.postimg.cc/KYxrWGwz/DosRe.png",
-      "https://i.postimg.cc/654021C9/TresRe.png",
-      "https://i.postimg.cc/cLqcQMcf/CuatroRe.png",
-      "https://i.postimg.cc/YC1z8GXZ/CincoRe.png"
-    ],
-    shadow: {
-      src: "https://i.postimg.cc/TPPSSvKr/Billie-Turnround-BASERON.png",
-      width: 250,
-      height: 80,
-      bottom: 165,
-      leftOffset: -125
-    },
-    size: 0.95,
-    spinSpeed: 230
-  },
-  {
-    name: "Finn",
-    frames: [
-      "https://i.postimg.cc/nLyzPYHZ/FinnUNO.png",
-      "https://i.postimg.cc/gksx2ZKq/FINNDOS.png",
-      "https://i.postimg.cc/7LGh9Qrm/FINNTRES.png",
-      "https://i.postimg.cc/hPcJnrVt/FINNCUATRO.png",
-      "https://i.postimg.cc/65PyZNDy/FINNCINCO.png",
-      "https://i.postimg.cc/13zfn3Cx/FINNSEIS.png",
-      "https://i.postimg.cc/yYpSTRS6/FINNSIETE.png",
-      "https://i.postimg.cc/prYp8hMv/FINNOCHO.png"
-    ],
-    shadow: {
-      src: "https://i.postimg.cc/TPPSSvKr/Billie-Turnround-BASERON.png",
-      width: 200,
-      height: 100,
-      bottom: 140,
-      leftOffset: -105
-    },
-    size: 1.25,
-    spinSpeed: 210
-  },
-  {
-    name: "Nippie",
-    frames: [
-      "https://i.postimg.cc/5y4Zq3Pn/NIPPIE1.png",
-      "https://i.postimg.cc/sX9kh8JM/NIPPIE2.png",
-      "https://i.postimg.cc/nzJ8MZq8/NIPPIE3.png",
-      "https://i.postimg.cc/wMwnWmZH/NIPPIE4.png",
-      "https://i.postimg.cc/T2Q82zwS/NIPPIE5.png",
-      "https://i.postimg.cc/kX502TR5/NIPPIE6.png"
-    ],
-    shadow: {
-      src: "https://i.postimg.cc/TPPSSvKr/Billie-Turnround-BASERON.png",
-      width: 200,
-      height: 80,
-      bottom: 150,
-      leftOffset: -100
-    },
-    size: 1.1,
-    spinSpeed: 220
-  },
-  {
-    name: "Anon",
-    frames: [
-      "https://i.postimg.cc/yYZPj0zX/Anon1.png",
-      "https://i.postimg.cc/MZ451dgp/Anon2.png",
-      "https://i.postimg.cc/KjK5dM3b/Anon3.png",
-      "https://i.postimg.cc/RhjT9ZwH/Anon3B.png",
-      "https://i.postimg.cc/3xQZcW8M/Anon4.png",
-      "https://i.postimg.cc/fR7vnZyV/Anon5.png",
-      "https://i.postimg.cc/zf0Svjn5/Anon6.png",
-      "https://i.postimg.cc/d0qjJXZ4/Anon7.png",
-      "https://i.postimg.cc/FHfmBm43/Anon8.png"
-    ],
-    shadow: {
-      src: "https://i.postimg.cc/TPPSSvKr/Billie-Turnround-BASERON.png",
-      width: 200,
-      height: 80,
-      bottom: 133,
-      leftOffset: -100
-    },
-    size: 1.1,
-    spinSpeed: 220
-  }
+  { name: "Billie", frames: ["https://i.postimg.cc/0Nnd1g1C/UnoRe.png","https://i.postimg.cc/KYxrWGwz/DosRe.png","https://i.postimg.cc/654021C9/TresRe.png","https://i.postimg.cc/cLqcQMcf/CuatroRe.png","https://i.postimg.cc/YC1z8GXZ/CincoRe.png"], size: 0.95, spinSpeed: 230 },
+  { name: "Finn", frames: ["https://i.postimg.cc/nLyzPYHZ/FinnUNO.png","https://i.postimg.cc/gksx2ZKq/FINNDOS.png","https://i.postimg.cc/7LGh9Qrm/FINNTRES.png","https://i.postimg.cc/hPcJnrVt/FINNCUATRO.png","https://i.postimg.cc/65PyZNDy/FINNCINCO.png","https://i.postimg.cc/13zfn3Cx/FINNSEIS.png","https://i.postimg.cc/yYpSTRS6/FINNSIETE.png","https://i.postimg.cc/prYp8hMv/FINNOCHO.png"], size: 1.25, spinSpeed: 210 },
+  { name: "Nippie", frames: ["https://i.postimg.cc/5y4Zq3Pn/NIPPIE1.png","https://i.postimg.cc/sX9kh8JM/NIPPIE2.png","https://i.postimg.cc/nzJ8MZq8/NIPPIE3.png","https://i.postimg.cc/wMwnWmZH/NIPPIE4.png","https://i.postimg.cc/T2Q82zwS/NIPPIE5.png","https://i.postimg.cc/kX502TR5/NIPPIE6.png"], size: 1.1, spinSpeed: 220 },
+  { name: "Anon", frames: ["https://i.postimg.cc/yYZPj0zX/Anon1.png","https://i.postimg.cc/MZ451dgp/Anon2.png","https://i.postimg.cc/KjK5dM3b/Anon3.png","https://i.postimg.cc/RhjT9ZwH/Anon3B.png","https://i.postimg.cc/3xQZcW8M/Anon4.png","https://i.postimg.cc/fR7vnZyV/Anon5.png","https://i.postimg.cc/zf0Svjn5/Anon6.png","https://i.postimg.cc/d0qjJXZ4/Anon7.png","https://i.postimg.cc/FHfmBm43/Anon8.png"], size: 1.1, spinSpeed: 220 }
 ];
 
 let currentCharIndex = 0;
 let currentFrame = 0;
 let intervalId;
 
-// DOM elements
 const character = document.getElementById("character");
-const shadow = document.getElementById("shadow");
 const turnBtn = document.getElementById("turnBtn");
 const effectBtn = document.getElementById("effectBtn");
 const paintBtn = document.getElementById("paintBtn");
 const prevChar = document.getElementById("prevChar");
 const nextChar = document.getElementById("nextChar");
+const charName = document.getElementById("charName");
 
 // Preload frames
 characters.forEach(char => char.frames.forEach(src => { const img = new Image(); img.src = src; }));
@@ -226,16 +211,16 @@ function setCharacter() {
   const char = characters[currentCharIndex];
   currentFrame = 0;
   character.src = char.frames[currentFrame];
-
-  shadow.src = char.shadow.src;
-  shadow.style.width = char.shadow.width + "px";
-  shadow.style.height = char.shadow.height + "px";
-  shadow.style.bottom = char.shadow.bottom + "px";
-  shadow.style.setProperty('--shadow-offset', `${char.shadow.leftOffset}px`);
-  shadow.style.display = character.classList.contains("glow") ? "none" : "block";
-
   character.style.width = 350 * char.size + "px";
   character.style.height = 350 * char.size + "px";
+
+  let title = FORCE_UPPERCASE ? char.name.toUpperCase() : char.name;
+  charName.textContent = title;
+  charName.classList.add("show");
+  if(ENABLE_TITLE_EFFECTS){
+    let effect = EFFECTS_POOL[Math.floor(Math.random() * EFFECTS_POOL.length)];
+    charName.className = "show " + effect;
+  }
 }
 setCharacter();
 
@@ -245,6 +230,7 @@ function updateFrame() {
   character.src = char.frames[currentFrame];
 }
 
+// Spin button
 turnBtn.addEventListener("click", updateFrame);
 turnBtn.addEventListener("mousedown", () => {
   const char = characters[currentCharIndex];
@@ -259,11 +245,10 @@ turnBtn.addEventListener("touchstart", (e) => {
 });
 turnBtn.addEventListener("touchend", () => clearInterval(intervalId));
 
-effectBtn.addEventListener("click", () => {
-  const isGlow = character.classList.toggle("glow");
-  shadow.style.display = isGlow ? "none" : "block";
-});
+// Glow toggle
+effectBtn.addEventListener("click", () => character.classList.toggle("glow"));
 
+// Background color cycling
 const hues = ["#a25647", "#4a90e2", "#f5a623", "#7ed321", "#9b59b6"];
 let hueIndex = 0;
 paintBtn.addEventListener("click", () => {
@@ -271,6 +256,7 @@ paintBtn.addEventListener("click", () => {
   document.body.style.background = hues[hueIndex];
 });
 
+// Character navigation
 prevChar.addEventListener("click", () => {
   currentCharIndex = (currentCharIndex - 1 + characters.length) % characters.length;
   setCharacter();
@@ -280,7 +266,7 @@ nextChar.addEventListener("click", () => {
   setCharacter();
 });
 
-// Snow effect
+// ===== SNOW EFFECT =====
 const canvas = document.getElementById("snowCanvas");
 const ctx = canvas.getContext("2d");
 let width = window.innerWidth;
@@ -322,10 +308,7 @@ function updateFlakes() {
   for(let flake of flakes){
     flake.y += flake.speed;
     flake.x += flake.drift;
-    if(flake.y>height){
-      flake.y=0;
-      flake.x=Math.random()*width;
-    }
+    if(flake.y>height){ flake.y=0; flake.x=Math.random()*width; }
     if(flake.x>width) flake.x=0;
     if(flake.x<0) flake.x=width;
   }
@@ -349,4 +332,3 @@ animateSnow();
 
 </body>
 </html>
-
