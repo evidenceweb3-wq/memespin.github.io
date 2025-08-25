@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Character Turnaround</title>
+<style>
+body {
+  background: #a25647;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  overflow: hidden;
+  transition: background 0.5s ease;
+}
+
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#shadow {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(var(--shadow-offset, -50%));
+}
+
+#character {
+  object-fit: contain;
+  z-index: 2;
+  transition: filter 0.3s ease;
+}
+
+.glow {
+  filter: drop-shadow(0 0 15px #fff) drop-shadow(0 0 30px #fff);
+}
+
+#buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+  font-size: 50px;
+  justify-content: center;
+  user-select: none;
+  z-index: 3;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 50px;
+  outline: none;
+  transition: transform 0.2s ease;
+}
+
+.arrowBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 50px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 4;
+}
+
+.arrowBtn.left {
+  left: 5vw;
+}
+
+.arrowBtn.right {
+  right: 5vw;
+}
+
+#logo {
+  margin-top: 50px;
+  width: 320px;
+}
+
+.snowCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+</style>
+</head>
+<body>
+
+<canvas class="snowCanvas" id="snowCanvas"></canvas>
+
+<div class="container">
+  <img id="shadow" src="" alt="Shadow">
+  <img id="character" src="" alt="Character">
+
+  <div id="buttons">
+    <button id="turnBtn">🔄</button>
+    <button id="effectBtn">✨</button>
+    <button id="paintBtn">🎨</button>
+  </div>
+
+  <img id="logo" src="https://i.postimg.cc/Jhbq2Yzd/power2f.png" alt="Logo">
+</div>
+
+<button class="arrowBtn left" id="prevChar">⬅️</button>
+<button class="arrowBtn right" id="nextChar">➡️</button>
+
+<script>
+// Characters array
+const characters = [
+  {
+    name: "Billie",
+    frames: [
+      "https://i.postimg.cc/0Nnd1g1C/UnoRe.png",
+      "https://i.postimg.cc/KYxrWGwz/DosRe.png",
+      "https://i.postimg.cc/654021C9/TresRe.png",
+      "https://i.postimg.cc/cLqcQMcf/CuatroRe.png",
+      "https://i.postimg.cc/YC1z8GXZ/CincoRe.png"
+    ],
+    shadow: {
+      src: "https://i.postimg.cc/TPPSSvKr/Billie-Turnround-BASERON.png",
+      width: 250,
+      height: 80,
+      bottom: 165,
+      leftOffset: -125
+    },
+    size: 0.95,
+    spinSpeed: 230
+  },
+  {
+    name: "Finn",
+    frames: [
+      "https://i.postimg.cc/nLyzPYHZ/FinnUNO.png",
+      "https://i.postimg.cc/gksx2ZKq/FINNDOS.png",
+      "https://i.postimg.cc/7LGh9Qrm/FINNTRES.png",
+      "https://i.postimg.cc/hPcJnrVt/FINNCUATRO.png",
+      "https://i.postimg.cc/65PyZNDy/FINNCINCO.png",
+      "https://i.postimg.cc/13zfn3Cx/FINNSEIS.png",
+      "https://i.postimg.cc/yYpSTRS6/FINNSIETE.png",
+      "https://i.postimg.cc/prYp8hMv/FINNOCHO.png"
+    ],
+    shadow: {
+      src: "https://i.postimg.cc/TPPSSvKr/Billie-Turnround-BASERON.png",
+      width: 200,
+      height: 100,
+      bottom: 140,
+      leftOffset: -105
+    },
+    size: 1.25,
+    spinSpeed: 210
+  },
+  {
+    name: "Nippie",
+    frames: [
+      "https://i.postimg.cc/5y4Zq3Pn/NIPPIE1.png",
+      "https://i.postimg.cc/sX9kh8JM/NIPPIE2.png",
+      "https://i.postimg.cc/nzJ8MZq8/NIPPIE3.png",
+      "https://i.postimg.cc/wMwnWmZH/NIPPIE4.png",
+      "https://i.postimg.cc/T2Q82zwS/NIPPIE5.png",
+      "https://i.postimg.cc/kX502TR5/NIPPIE6.png"
+    ],
+    shadow: {
+      src: "https://i.postimg.cc/TPPSSvKr/Billie-Turnround-BASERON.png",
+      width: 200,
+      height: 80,
+      bottom: 150,
+      leftOffset: -100
+    },
+    size: 1.1,
+    spinSpeed: 220
+  },
+  {
+    name: "Anon",
+    frames: [
+      "https://i.postimg.cc/yYZPj0zX/Anon1.png",
+      "https://i.postimg.cc/MZ451dgp/Anon2.png",
+      "https://i.postimg.cc/KjK5dM3b/Anon3.png",
+      "https://i.postimg.cc/RhjT9ZwH/Anon3B.png",
+      "https://i.postimg.cc/3xQZcW8M/Anon4.png",
+      "https://i.postimg.cc/fR7vnZyV/Anon5.png",
+      "https://i.postimg.cc/zf0Svjn5/Anon6.png",
+      "https://i.postimg.cc/d0qjJXZ4/Anon7.png",
+      "https://i.postimg.cc/FHfmBm43/Anon8.png"
+    ],
+    shadow: {
+      src: "https://i.postimg.cc/TPPSSvKr/Billie-Turnround-BASERON.png",
+      width: 200,
+      height: 80,
+      bottom: 133,
+      leftOffset: -100
+    },
+    size: 1.1,
+    spinSpeed: 220
+  }
+];
+
+let currentCharIndex = 0;
+let currentFrame = 0;
+let intervalId;
+
+// DOM elements
+const character = document.getElementById("character");
+const shadow = document.getElementById("shadow");
+const turnBtn = document.getElementById("turnBtn");
+const effectBtn = document.getElementById("effectBtn");
+const paintBtn = document.getElementById("paintBtn");
+const prevChar = document.getElementById("prevChar");
+const nextChar = document.getElementById("nextChar");
+
+// Preload frames
+characters.forEach(char => char.frames.forEach(src => { const img = new Image(); img.src = src; }));
+
+function setCharacter() {
+  const char = characters[currentCharIndex];
+  currentFrame = 0;
+  character.src = char.frames[currentFrame];
+
+  shadow.src = char.shadow.src;
+  shadow.style.width = char.shadow.width + "px";
+  shadow.style.height = char.shadow.height + "px";
+  shadow.style.bottom = char.shadow.bottom + "px";
+  shadow.style.setProperty('--shadow-offset', `${char.shadow.leftOffset}px`);
+  shadow.style.display = character.classList.contains("glow") ? "none" : "block";
+
+  character.style.width = 350 * char.size + "px";
+  character.style.height = 350 * char.size + "px";
+}
+setCharacter();
+
+function updateFrame() {
+  const char = characters[currentCharIndex];
+  currentFrame = (currentFrame + 1) % char.frames.length;
+  character.src = char.frames[currentFrame];
+}
+
+turnBtn.addEventListener("click", updateFrame);
+turnBtn.addEventListener("mousedown", () => {
+  const char = characters[currentCharIndex];
+  intervalId = setInterval(updateFrame, char.spinSpeed);
+});
+turnBtn.addEventListener("mouseup", () => clearInterval(intervalId));
+turnBtn.addEventListener("mouseleave", () => clearInterval(intervalId));
+turnBtn.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+  const char = characters[currentCharIndex];
+  intervalId = setInterval(updateFrame, char.spinSpeed);
+});
+turnBtn.addEventListener("touchend", () => clearInterval(intervalId));
+
+effectBtn.addEventListener("click", () => {
+  const isGlow = character.classList.toggle("glow");
+  shadow.style.display = isGlow ? "none" : "block";
+});
+
+const hues = ["#a25647", "#4a90e2", "#f5a623", "#7ed321", "#9b59b6"];
+let hueIndex = 0;
+paintBtn.addEventListener("click", () => {
+  hueIndex = (hueIndex + 1) % hues.length;
+  document.body.style.background = hues[hueIndex];
+});
+
+prevChar.addEventListener("click", () => {
+  currentCharIndex = (currentCharIndex - 1 + characters.length) % characters.length;
+  setCharacter();
+});
+nextChar.addEventListener("click", () => {
+  currentCharIndex = (currentCharIndex + 1) % characters.length;
+  setCharacter();
+});
+
+// Snow effect
+const canvas = document.getElementById("snowCanvas");
+const ctx = canvas.getContext("2d");
+let width = window.innerWidth;
+let height = window.innerHeight;
+canvas.width = width;
+canvas.height = height;
+
+const numFlakes = 120;
+const flakes = [];
+
+function createFlakes() {
+  for(let i=0;i<numFlakes;i++){
+    flakes.push({
+      x: Math.random()*width,
+      y: Math.random()*height,
+      radius: Math.random()*3+1,
+      speed: Math.random()*1.5+0.5,
+      drift: Math.random()*1.5-0.75,
+      opacity: Math.random()*0.8+0.2
+    });
+  }
+}
+
+function drawFlakes() {
+  ctx.clearRect(0,0,width,height);
+  ctx.fillStyle = "white";
+  ctx.beginPath();
+  for(let flake of flakes){
+    ctx.globalAlpha = flake.opacity;
+    ctx.moveTo(flake.x,flake.y);
+    ctx.arc(flake.x,flake.y,flake.radius,0,Math.PI*2);
+  }
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  updateFlakes();
+}
+
+function updateFlakes() {
+  for(let flake of flakes){
+    flake.y += flake.speed;
+    flake.x += flake.drift;
+    if(flake.y>height){
+      flake.y=0;
+      flake.x=Math.random()*width;
+    }
+    if(flake.x>width) flake.x=0;
+    if(flake.x<0) flake.x=width;
+  }
+}
+
+function animateSnow(){
+  drawFlakes();
+  requestAnimationFrame(animateSnow);
+}
+
+window.addEventListener("resize", () => {
+  width = window.innerWidth;
+  height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
+});
+
+createFlakes();
+animateSnow();
+</script>
+
+</body>
+</html>
