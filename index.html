@@ -23,21 +23,21 @@ body {
 
 /* ===== FIXED ELEMENTS ===== */
 #topLogo {
-  width: 25vw;
   position: fixed;
   top: 4vh;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
+  width: clamp(150px, 20vw, 350px);
 }
 
 #logo {
-  width: 22vw;
   position: fixed;
   bottom: 4vh;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
+  width: clamp(120px, 18vw, 320px);
 }
 
 /* ===== TITLE AND PRICE ===== */
@@ -46,12 +46,12 @@ body {
   top: 12vh;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 6vw;
   font-weight: 800;
   color: white;
   text-shadow: 2px 2px 0.5vw rgba(0,0,0,0.7);
   z-index: 10;
   text-align: center;
+  font-size: clamp(24px, 6vw, 60px);
 }
 
 #priceContainer {
@@ -59,11 +59,11 @@ body {
   top: 20vh;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 3.5vw;
   color: #fff;
   text-shadow: 1px 1px 0.3vw rgba(0,0,0,0.7);
   z-index: 10;
   text-align: center;
+  font-size: clamp(14px, 3.5vw, 28px);
 }
 
 /* ===== CHARACTER ===== */
@@ -89,9 +89,9 @@ body {
   transform: translateX(-50%);
   display: flex;
   gap: 4vw;
-  font-size: 10vw;
   justify-content: center;
   z-index: 10;
+  font-size: clamp(32px, 10vw, 80px);
 }
 
 button {
@@ -110,8 +110,8 @@ button {
   top: 50%;
   left: 5vw;
   transform: translateY(-50%);
-  font-size: 10vw;
   z-index: 10;
+  font-size: clamp(32px, 10vw, 80px);
 }
 
 .arrowBtn.right {
@@ -119,8 +119,8 @@ button {
   top: 50%;
   right: 5vw;
   transform: translateY(-50%);
-  font-size: 10vw;
   z-index: 10;
+  font-size: clamp(32px, 10vw, 80px);
 }
 
 /* ===== SNOW CANVAS ===== */
@@ -162,6 +162,7 @@ const FORCE_UPPERCASE = true;
 const ENABLE_TITLE_EFFECTS = true;
 const EFFECTS_POOL = ["effect-rainbow","effect-glitch","effect-flicker","effect-shadowPulse"];
 
+// ===== CHARACTERS =====
 const characters = [
   { name: "Billie", frames: ["https://i.postimg.cc/0Nnd1g1C/UnoRe.png","https://i.postimg.cc/KYxrWGwz/DosRe.png","https://i.postimg.cc/654021C9/TresRe.png","https://i.postimg.cc/cLqcQMcf/CuatroRe.png","https://i.postimg.cc/YC1z8GXZ/CincoRe.png"], size: 0.95, spinSpeed: 230, pairId:"GNEqyxGV9u8Hz5G3RX1VxUfWCQFuXEP2ckmbLxe1bmyf", supply: 999940952 },
   { name: "Finn", frames: ["https://i.postimg.cc/nLyzPYHZ/FinnUNO.png","https://i.postimg.cc/gksx2ZKq/FINNDOS.png","https://i.postimg.cc/7LGh9Qrm/FINNTRES.png","https://i.postimg.cc/hPcJnrVt/FINNCUATRO.png","https://i.postimg.cc/65PyZNDy/FINNCINCO.png","https://i.postimg.cc/13zfn3Cx/FINNSEIS.png","https://i.postimg.cc/yYpSTRS6/FINNSIETE.png","https://i.postimg.cc/prYp8hMv/FINNOCHO.png"], size: 1.25, spinSpeed: 210, pairId:"3kZxw7r663dNYqbw8zGCK7NRrcBMXMcRnv3heak4F7mC", supply: 985377686 },
@@ -186,15 +187,18 @@ const priceContainer = document.getElementById("priceContainer");
 // Preload frames
 characters.forEach(char => char.frames.forEach(src => { const img = new Image(); img.src = src; }));
 
+// ===== MIN/MAX SIZES =====
+const MIN_CHAR_SIZE = 120;  // px
+const MAX_CHAR_SIZE = 400;  // px
+
 function setCharacter() {
   const char = characters[currentCharIndex];
   currentFrame = 0;
   character.src = char.frames[currentFrame];
 
-  // Responsive character scaling
   const baseSize = Math.min(window.innerWidth, window.innerHeight);
-  const charScale = char.size * 0.35;
-  character.style.width = baseSize * charScale + "px";
+  const charWidth = Math.min(Math.max(char.size * 0.35 * baseSize, MIN_CHAR_SIZE), MAX_CHAR_SIZE);
+  character.style.width = charWidth + "px";
   character.style.height = "auto";
 
   let title = FORCE_UPPERCASE ? char.name.toUpperCase() : char.name;
@@ -219,6 +223,7 @@ async function updatePrice(char){
     const data = await res.json();
     const price = data.pair?.priceUsd ? parseFloat(data.pair.priceUsd).toFixed(6) : "0.000000";
     const mcap = char.supply ? (char.supply * parseFloat(price)).toLocaleString(undefined, {maximumFractionDigits:0}) : "0";
+
     priceContainer.innerHTML = `Price: $${price} | MCAP: $${mcap}`;
   } catch(err){
     priceContainer.innerText = "Price unavailable";
@@ -261,6 +266,7 @@ canvas.height = height;
 
 const numFlakes = 120;
 const flakes = [];
+
 function createFlakes() {
   for(let i=0;i<numFlakes;i++){
     flakes.push({ x: Math.random()*width, y: Math.random()*height, radius: Math.random()*3+1, speed: Math.random()*1.5+0.5, drift: Math.random()*1.5-0.75, opacity: Math.random()*0.8+0.2 });
@@ -289,12 +295,13 @@ function updateFlakes() {
   }
 }
 function animateSnow(){ drawFlakes(); requestAnimationFrame(animateSnow); }
+
 window.addEventListener("resize", () => { 
   width = window.innerWidth; 
   height = window.innerHeight; 
   canvas.width = width; 
   canvas.height = height; 
-  setCharacter(); // resize character
+  setCharacter();
 });
 
 createFlakes();
