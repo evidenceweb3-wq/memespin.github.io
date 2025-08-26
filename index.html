@@ -12,9 +12,8 @@ body {
     #a25647;
   background-blend-mode: overlay;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   height: 100vh;
   margin: 0;
   font-family: "Segoe UI", sans-serif;
@@ -22,88 +21,77 @@ body {
   transition: background 0.5s ease;
 }
 
-/* ===== CONTAINER ===== */
-.container {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* ===== FIXED ELEMENTS ===== */
+#topLogo {
+  width: 350px;
+  position: fixed;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
 }
 
-/* ===== CHARACTER TITLE ===== */
+#logo {
+  width: 320px;
+  position: fixed;
+  bottom: 45px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+/* ===== TITLE AND PRICE FIXED ===== */
 #charName {
-  position: absolute;
-  top: -30px; 
-  font-size: 32px; 
+  position: fixed;
+  top: 100px; /* under top logo */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 40px;
   font-weight: 800;
   color: white;
   text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
-  z-index: 5;
+  z-index: 10;
   text-align: center;
-  width: 100%;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity .6s ease, transform .6s ease;
-  pointer-events: none;
-}
-#charName.show {
-  opacity: 1;
-  transform: translateY(0);
 }
 
-/* ===== EFFECT CLASSES ===== */
-.effect-rainbow {
-  background: linear-gradient(90deg, #ff004c, #ffb800, #2cff72, #00e5ff, #8a2be2, #ff004c);
-  background-size: 400% 100%;
-  -webkit-background-clip: text;
-          background-clip: text;
-  color: transparent;
-  animation: moveGradient 4s linear infinite;
-}
-@keyframes moveGradient { 0%{background-position:0% 0} 100%{background-position:400% 0} }
-
-.effect-glitch {
-  animation: glitchShift .6s infinite steps(2);
-}
-@keyframes glitchShift {
-  0%   { text-shadow: 2px 0 #ff004c, -2px 0 #00e5ff; }
-  50%  { text-shadow: -2px 0 #ff004c, 2px 0 #00e5ff; }
-  100% { text-shadow: 2px 0 #ff004c, -2px 0 #00e5ff; }
-}
-
-.effect-flicker { animation: flicker 1.2s infinite; }
-@keyframes flicker {
-  0%, 19%, 21%, 23%, 80%, 100% { opacity: 1; }
-  20%, 22%, 24% { opacity: .6; }
-  81% { opacity: .85; }
-}
-
-.effect-shadowPulse { animation: shadowPulse 1.4s ease-in-out infinite; }
-@keyframes shadowPulse {
-  0%,100% { text-shadow: 0 0 6px rgba(255,255,255,.6), 0 0 18px rgba(255,255,255,.3); }
-  50% { text-shadow: 0 0 12px rgba(255,255,255,.9), 0 0 28px rgba(255,255,255,.5); }
+#priceContainer {
+  position: fixed;
+  top: 155px; /* under title */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  color: #fff;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+  z-index: 10;
+  text-align: center;
 }
 
 /* ===== CHARACTER ===== */
 #character {
   object-fit: contain;
   z-index: 2;
-  transition: filter 0.3s ease;
+  transition: filter 0.3s ease, transform 0.3s ease;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .glow {
   filter: drop-shadow(0 0 15px #fff) drop-shadow(0 0 30px #fff);
 }
 
-/* ===== BUTTONS ===== */
+/* ===== ACTION BUTTONS ===== */
 #buttons {
-  margin-top: 20px;
+  position: fixed;
+  bottom: 100px; /* above bottom logo */
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   gap: 20px;
   font-size: 50px;
   justify-content: center;
-  user-select: none;
-  z-index: 3;
+  z-index: 10;
 }
 
 button {
@@ -115,36 +103,23 @@ button {
   transition: transform 0.2s ease;
 }
 
-.arrowBtn {
-  position: absolute;
+/* ===== ARROW BUTTONS ===== */
+.arrowBtn.left {
+  position: fixed;
   top: 50%;
+  left: 5vw;
   transform: translateY(-50%);
   font-size: 50px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  z-index: 4;
-}
-.arrowBtn.left { left: 5vw; }
-.arrowBtn.right { right: 5vw; }
-
-/* ===== LOGOS ===== */
-#topLogo {
-  width: 350px;
-  position: absolute;
-  top: -80px;
-  z-index: 6;
-  left: 50%;
-  transform: translateX(-50%);
+  z-index: 10;
 }
 
-#logo {
-  width: 320px;
-  position: absolute;
-  bottom: -50px;
-  z-index: 6;
-  left: 50%;
-  transform: translateX(-50%);
+.arrowBtn.right {
+  position: fixed;
+  top: 50%;
+  right: 5vw;
+  transform: translateY(-50%);
+  font-size: 50px;
+  z-index: 10;
 }
 
 /* ===== SNOW CANVAS ===== */
@@ -163,20 +138,21 @@ button {
 
 <canvas class="snowCanvas" id="snowCanvas"></canvas>
 
-<div class="container">
-  <div id="charName"></div>
-  <img id="character" src="" alt="Character">
-
-  <div id="buttons">
-    <button id="turnBtn">🔄</button>
-    <button id="effectBtn">✨</button>
-    <button id="paintBtn">🎨</button>
-  </div>
-
-  <img id="topLogo" src="https://i.postimg.cc/J4jjNvTq/memspin1.png" alt="Top Logo">
-  <img id="logo" src="https://i.postimg.cc/Jhbq2Yzd/power2f.png" alt="Bottom Logo">
+<!-- Fixed Logos, Buttons -->
+<img id="topLogo" src="https://i.postimg.cc/J4jjNvTq/memspin1.png" alt="Top Logo">
+<img id="logo" src="https://i.postimg.cc/Jhbq2Yzd/power2f.png" alt="Bottom Logo">
+<div id="buttons">
+  <button id="turnBtn">🔄</button>
+  <button id="effectBtn">✨</button>
+  <button id="paintBtn">🎨</button>
 </div>
 
+<!-- Character Title, Character, Price -->
+<div id="charName"></div>
+<img id="character" src="" alt="Character">
+<div id="priceContainer">Loading price...</div>
+
+<!-- Arrow Navigation -->
 <button class="arrowBtn left" id="prevChar">⬅️</button>
 <button class="arrowBtn right" id="nextChar">➡️</button>
 
@@ -186,10 +162,10 @@ const ENABLE_TITLE_EFFECTS = true;
 const EFFECTS_POOL = ["effect-rainbow","effect-glitch","effect-flicker","effect-shadowPulse"];
 
 const characters = [
-  { name: "Billie", frames: ["https://i.postimg.cc/0Nnd1g1C/UnoRe.png","https://i.postimg.cc/KYxrWGwz/DosRe.png","https://i.postimg.cc/654021C9/TresRe.png","https://i.postimg.cc/cLqcQMcf/CuatroRe.png","https://i.postimg.cc/YC1z8GXZ/CincoRe.png"], size: 0.95, spinSpeed: 230 },
-  { name: "Finn", frames: ["https://i.postimg.cc/nLyzPYHZ/FinnUNO.png","https://i.postimg.cc/gksx2ZKq/FINNDOS.png","https://i.postimg.cc/7LGh9Qrm/FINNTRES.png","https://i.postimg.cc/hPcJnrVt/FINNCUATRO.png","https://i.postimg.cc/65PyZNDy/FINNCINCO.png","https://i.postimg.cc/13zfn3Cx/FINNSEIS.png","https://i.postimg.cc/yYpSTRS6/FINNSIETE.png","https://i.postimg.cc/prYp8hMv/FINNOCHO.png"], size: 1.25, spinSpeed: 210 },
-  { name: "Nippie", frames: ["https://i.postimg.cc/5y4Zq3Pn/NIPPIE1.png","https://i.postimg.cc/sX9kh8JM/NIPPIE2.png","https://i.postimg.cc/nzJ8MZq8/NIPPIE3.png","https://i.postimg.cc/wMwnWmZH/NIPPIE4.png","https://i.postimg.cc/T2Q82zwS/NIPPIE5.png","https://i.postimg.cc/kX502TR5/NIPPIE6.png"], size: 1.1, spinSpeed: 220 },
-  { name: "Anon", frames: ["https://i.postimg.cc/yYZPj0zX/Anon1.png","https://i.postimg.cc/MZ451dgp/Anon2.png","https://i.postimg.cc/KjK5dM3b/Anon3.png","https://i.postimg.cc/RhjT9ZwH/Anon3B.png","https://i.postimg.cc/3xQZcW8M/Anon4.png","https://i.postimg.cc/fR7vnZyV/Anon5.png","https://i.postimg.cc/zf0Svjn5/Anon6.png","https://i.postimg.cc/d0qjJXZ4/Anon7.png","https://i.postimg.cc/FHfmBm43/Anon8.png"], size: 1.1, spinSpeed: 220 }
+  { name: "Billie", frames: ["https://i.postimg.cc/0Nnd1g1C/UnoRe.png","https://i.postimg.cc/KYxrWGwz/DosRe.png","https://i.postimg.cc/654021C9/TresRe.png","https://i.postimg.cc/cLqcQMcf/CuatroRe.png","https://i.postimg.cc/YC1z8GXZ/CincoRe.png"], size: 0.95, spinSpeed: 230, pairId:"GNEqyxGV9u8Hz5G3RX1VxUfWCQFuXEP2ckmbLxe1bmyf", supply: 999940952 },
+  { name: "Finn", frames: ["https://i.postimg.cc/nLyzPYHZ/FinnUNO.png","https://i.postimg.cc/gksx2ZKq/FINNDOS.png","https://i.postimg.cc/7LGh9Qrm/FINNTRES.png","https://i.postimg.cc/hPcJnrVt/FINNCUATRO.png","https://i.postimg.cc/65PyZNDy/FINNCINCO.png","https://i.postimg.cc/13zfn3Cx/FINNSEIS.png","https://i.postimg.cc/yYpSTRS6/FINNSIETE.png","https://i.postimg.cc/prYp8hMv/FINNOCHO.png"], size: 1.25, spinSpeed: 210, pairId:"3kZxw7r663dNYqbw8zGCK7NRrcBMXMcRnv3heak4F7mC", supply: 985377686 },
+  { name: "Nippie", frames: ["https://i.postimg.cc/5y4Zq3Pn/NIPPIE1.png","https://i.postimg.cc/sX9kh8JM/NIPPIE2.png","https://i.postimg.cc/nzJ8MZq8/NIPPIE3.png","https://i.postimg.cc/wMwnWmZH/NIPPIE4.png","https://i.postimg.cc/T2Q82zwS/NIPPIE5.png","https://i.postimg.cc/kX502TR5/NIPPIE6.png"], size: 1.1, spinSpeed: 220, pairId:"ENYbntd3KgJJJvMqbe5Awtqu8jkVjnczU8TK46q3odnG", supply: 954759985 },
+  { name: "Anon", frames: ["https://i.postimg.cc/yYZPj0zX/Anon1.png","https://i.postimg.cc/MZ451dgp/Anon2.png","https://i.postimg.cc/KjK5dM3b/Anon3.png","https://i.postimg.cc/RhjT9ZwH/Anon3B.png","https://i.postimg.cc/3xQZcW8M/Anon4.png","https://i.postimg.cc/fR7vnZyV/Anon5.png","https://i.postimg.cc/zf0Svjn5/Anon6.png","https://i.postimg.cc/d0qjJXZ4/Anon7.png","https://i.postimg.cc/FHfmBm43/Anon8.png"], size: 1.1, spinSpeed: 220, pairId:"8eQTQLnBmEgeY9avVjrqqgX8ZVr8MRFrXEHpMrx6DGff", supply: 1000000000 }
 ];
 
 let currentCharIndex = 0;
@@ -203,6 +179,7 @@ const paintBtn = document.getElementById("paintBtn");
 const prevChar = document.getElementById("prevChar");
 const nextChar = document.getElementById("nextChar");
 const charName = document.getElementById("charName");
+const priceContainer = document.getElementById("priceContainer");
 
 // Preload frames
 characters.forEach(char => char.frames.forEach(src => { const img = new Image(); img.src = src; }));
@@ -214,35 +191,49 @@ function setCharacter() {
   character.style.width = 350 * char.size + "px";
   character.style.height = 350 * char.size + "px";
 
+  // Set title text (fixed position in CSS handles placement)
   let title = FORCE_UPPERCASE ? char.name.toUpperCase() : char.name;
   charName.textContent = title;
-  charName.classList.add("show");
   if(ENABLE_TITLE_EFFECTS){
     let effect = EFFECTS_POOL[Math.floor(Math.random() * EFFECTS_POOL.length)];
     charName.className = "show " + effect;
+  } else {
+    charName.className = "show";
+  }
+
+  updatePrice(char);
+}
+
+async function updatePrice(char){
+  if(!char.pairId) { 
+    priceContainer.innerText = "Price unavailable"; 
+    return; 
+  }
+  try{
+    const res = await fetch(`https://api.dexscreener.com/latest/dex/pairs/solana/${char.pairId}`);
+    const data = await res.json();
+    const price = data.pair?.priceUsd ? parseFloat(data.pair.priceUsd).toFixed(6) : "0.000000";
+    const mcap = char.supply ? (char.supply * parseFloat(price)).toLocaleString(undefined, {maximumFractionDigits:0}) : "0";
+
+    // Only show price and MCAP
+    priceContainer.innerHTML = `Price: $${price} | MCAP: $${mcap}`;
+  } catch(err){
+    priceContainer.innerText = "Price unavailable";
+    console.error(err);
   }
 }
-setCharacter();
 
+// Spin button
 function updateFrame() {
   const char = characters[currentCharIndex];
   currentFrame = (currentFrame + 1) % char.frames.length;
   character.src = char.frames[currentFrame];
 }
-
-// Spin button
 turnBtn.addEventListener("click", updateFrame);
-turnBtn.addEventListener("mousedown", () => {
-  const char = characters[currentCharIndex];
-  intervalId = setInterval(updateFrame, char.spinSpeed);
-});
+turnBtn.addEventListener("mousedown", () => { const char = characters[currentCharIndex]; intervalId = setInterval(updateFrame, char.spinSpeed); });
 turnBtn.addEventListener("mouseup", () => clearInterval(intervalId));
 turnBtn.addEventListener("mouseleave", () => clearInterval(intervalId));
-turnBtn.addEventListener("touchstart", (e) => {
-  e.preventDefault();
-  const char = characters[currentCharIndex];
-  intervalId = setInterval(updateFrame, char.spinSpeed);
-});
+turnBtn.addEventListener("touchstart", (e) => { e.preventDefault(); const char = characters[currentCharIndex]; intervalId = setInterval(updateFrame, char.spinSpeed); });
 turnBtn.addEventListener("touchend", () => clearInterval(intervalId));
 
 // Glow toggle
@@ -251,20 +242,11 @@ effectBtn.addEventListener("click", () => character.classList.toggle("glow"));
 // Background color cycling
 const hues = ["#a25647", "#4a90e2", "#f5a623", "#7ed321", "#9b59b6"];
 let hueIndex = 0;
-paintBtn.addEventListener("click", () => {
-  hueIndex = (hueIndex + 1) % hues.length;
-  document.body.style.background = hues[hueIndex];
-});
+paintBtn.addEventListener("click", () => { hueIndex = (hueIndex + 1) % hues.length; document.body.style.background = hues[hueIndex]; });
 
 // Character navigation
-prevChar.addEventListener("click", () => {
-  currentCharIndex = (currentCharIndex - 1 + characters.length) % characters.length;
-  setCharacter();
-});
-nextChar.addEventListener("click", () => {
-  currentCharIndex = (currentCharIndex + 1) % characters.length;
-  setCharacter();
-});
+prevChar.addEventListener("click", () => { currentCharIndex = (currentCharIndex - 1 + characters.length) % characters.length; setCharacter(); });
+nextChar.addEventListener("click", () => { currentCharIndex = (currentCharIndex + 1) % characters.length; setCharacter(); });
 
 // ===== SNOW EFFECT =====
 const canvas = document.getElementById("snowCanvas");
@@ -279,17 +261,9 @@ const flakes = [];
 
 function createFlakes() {
   for(let i=0;i<numFlakes;i++){
-    flakes.push({
-      x: Math.random()*width,
-      y: Math.random()*height,
-      radius: Math.random()*3+1,
-      speed: Math.random()*1.5+0.5,
-      drift: Math.random()*1.5-0.75,
-      opacity: Math.random()*0.8+0.2
-    });
+    flakes.push({ x: Math.random()*width, y: Math.random()*height, radius: Math.random()*3+1, speed: Math.random()*1.5+0.5, drift: Math.random()*1.5-0.75, opacity: Math.random()*0.8+0.2 });
   }
 }
-
 function drawFlakes() {
   ctx.clearRect(0,0,width,height);
   ctx.fillStyle = "white";
@@ -303,7 +277,6 @@ function drawFlakes() {
   ctx.globalAlpha = 1;
   updateFlakes();
 }
-
 function updateFlakes() {
   for(let flake of flakes){
     flake.y += flake.speed;
@@ -313,21 +286,12 @@ function updateFlakes() {
     if(flake.x<0) flake.x=width;
   }
 }
-
-function animateSnow(){
-  drawFlakes();
-  requestAnimationFrame(animateSnow);
-}
-
-window.addEventListener("resize", () => {
-  width = window.innerWidth;
-  height = window.innerHeight;
-  canvas.width = width;
-  canvas.height = height;
-});
+function animateSnow(){ drawFlakes(); requestAnimationFrame(animateSnow); }
+window.addEventListener("resize", () => { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; });
 
 createFlakes();
 animateSnow();
+setCharacter();
 </script>
 
 </body>
