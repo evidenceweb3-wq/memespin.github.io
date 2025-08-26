@@ -23,45 +23,45 @@ body {
 
 /* ===== FIXED ELEMENTS ===== */
 #topLogo {
-  width: 350px;
+  width: 25vw;
   position: fixed;
-  top: 40px;
+  top: 4vh;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
 }
 
 #logo {
-  width: 320px;
+  width: 22vw;
   position: fixed;
-  bottom: 45px;
+  bottom: 4vh;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
 }
 
-/* ===== TITLE AND PRICE FIXED ===== */
+/* ===== TITLE AND PRICE ===== */
 #charName {
   position: fixed;
-  top: 85px; /* under top logo */
+  top: 12vh;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 40px;
+  font-size: 6vw;
   font-weight: 800;
   color: white;
-  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+  text-shadow: 2px 2px 0.5vw rgba(0,0,0,0.7);
   z-index: 10;
   text-align: center;
 }
 
 #priceContainer {
   position: fixed;
-  top: 145px; /* under title */
+  top: 20vh;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 18px;
+  font-size: 3.5vw;
   color: #fff;
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+  text-shadow: 1px 1px 0.3vw rgba(0,0,0,0.7);
   z-index: 10;
   text-align: center;
 }
@@ -78,18 +78,18 @@ body {
 }
 
 .glow {
-  filter: drop-shadow(0 0 15px #fff) drop-shadow(0 0 30px #fff);
+  filter: drop-shadow(0 0 1vw #fff) drop-shadow(0 0 2vw #fff);
 }
 
 /* ===== ACTION BUTTONS ===== */
 #buttons {
   position: fixed;
-  bottom: 100px; /* above bottom logo */
+  bottom: 12vh;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 20px;
-  font-size: 50px;
+  gap: 4vw;
+  font-size: 10vw;
   justify-content: center;
   z-index: 10;
 }
@@ -98,9 +98,10 @@ button {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 40px;
+  font-size: inherit;
   outline: none;
   transition: transform 0.2s ease;
+  touch-action: manipulation;
 }
 
 /* ===== ARROW BUTTONS ===== */
@@ -109,7 +110,7 @@ button {
   top: 50%;
   left: 5vw;
   transform: translateY(-50%);
-  font-size: 40px;
+  font-size: 10vw;
   z-index: 10;
 }
 
@@ -118,7 +119,7 @@ button {
   top: 50%;
   right: 5vw;
   transform: translateY(-50%);
-  font-size: 40px;
+  font-size: 10vw;
   z-index: 10;
 }
 
@@ -163,21 +164,10 @@ const EFFECTS_POOL = ["effect-rainbow","effect-glitch","effect-flicker","effect-
 
 const characters = [
   { name: "Billie", frames: ["https://i.postimg.cc/0Nnd1g1C/UnoRe.png","https://i.postimg.cc/KYxrWGwz/DosRe.png","https://i.postimg.cc/654021C9/TresRe.png","https://i.postimg.cc/cLqcQMcf/CuatroRe.png","https://i.postimg.cc/YC1z8GXZ/CincoRe.png"], size: 0.95, spinSpeed: 230, pairId:"GNEqyxGV9u8Hz5G3RX1VxUfWCQFuXEP2ckmbLxe1bmyf", supply: 999940952 },
-  {name: "Bagz",
-  frames: [
-    "https://i.postimg.cc/76DxBpz7/Bagz1.png",
-    "https://i.postimg.cc/Qd2N7Bxf/Bagz2.png",
-    "https://i.postimg.cc/fRtTk7Z3/Bagz3.png",
-    "https://i.postimg.cc/QMc8JXFh/Bagz4.png",
-  ],
-  size: 1.0,                  // adjust size as needed
-  spinSpeed: 220,             // adjust rotation speed
-  pairId: "4MzZA4pqd7HqU9gQKuLSwtC5nUxFpmw5PvRmGoSGMNxF", // replace with real Dexscreener pair ID
-  supply: 1000000000          // replace with actual supply
-},
-  { name: "Finn", frames: ["https://i.postimg.cc/nLyzPYHZ/FinnUNO.png","https://i.postimg.cc/gksx2ZKq/FINNDOS.png","https://i.postimg.cc/7LGh9Qrm/FINNTRES.png","https://i.postimg.cc/hPcJnrVt/FINNCUATRO.png","https://i.postimg.cc/65PyZNDy/FINNCINCO.png","https://i.postimg.cc/13zfn3Cx/FINNSEIS.png","https://i.postimg.cc/yYpSTRS6/FINNSIETE.png","https://i.postimg.cc/prYp8hMv/FINNOCHO.png"], size: 1.10, spinSpeed: 210, pairId:"3kZxw7r663dNYqbw8zGCK7NRrcBMXMcRnv3heak4F7mC", supply: 985377686 },
+  { name: "Finn", frames: ["https://i.postimg.cc/nLyzPYHZ/FinnUNO.png","https://i.postimg.cc/gksx2ZKq/FINNDOS.png","https://i.postimg.cc/7LGh9Qrm/FINNTRES.png","https://i.postimg.cc/hPcJnrVt/FINNCUATRO.png","https://i.postimg.cc/65PyZNDy/FINNCINCO.png","https://i.postimg.cc/13zfn3Cx/FINNSEIS.png","https://i.postimg.cc/yYpSTRS6/FINNSIETE.png","https://i.postimg.cc/prYp8hMv/FINNOCHO.png"], size: 1.25, spinSpeed: 210, pairId:"3kZxw7r663dNYqbw8zGCK7NRrcBMXMcRnv3heak4F7mC", supply: 985377686 },
   { name: "Nippie", frames: ["https://i.postimg.cc/5y4Zq3Pn/NIPPIE1.png","https://i.postimg.cc/sX9kh8JM/NIPPIE2.png","https://i.postimg.cc/nzJ8MZq8/NIPPIE3.png","https://i.postimg.cc/wMwnWmZH/NIPPIE4.png","https://i.postimg.cc/T2Q82zwS/NIPPIE5.png","https://i.postimg.cc/kX502TR5/NIPPIE6.png"], size: 1.1, spinSpeed: 220, pairId:"ENYbntd3KgJJJvMqbe5Awtqu8jkVjnczU8TK46q3odnG", supply: 954759985 },
-  { name: "Anon", frames: ["https://i.postimg.cc/yYZPj0zX/Anon1.png","https://i.postimg.cc/MZ451dgp/Anon2.png","https://i.postimg.cc/KjK5dM3b/Anon3.png","https://i.postimg.cc/RhjT9ZwH/Anon3B.png","https://i.postimg.cc/3xQZcW8M/Anon4.png","https://i.postimg.cc/fR7vnZyV/Anon5.png","https://i.postimg.cc/zf0Svjn5/Anon6.png","https://i.postimg.cc/d0qjJXZ4/Anon7.png","https://i.postimg.cc/FHfmBm43/Anon8.png"], size: 1.1, spinSpeed: 220, pairId:"8eQTQLnBmEgeY9avVjrqqgX8ZVr8MRFrXEHpMrx6DGff", supply: 1000000000 }
+  { name: "Anon", frames: ["https://i.postimg.cc/yYZPj0zX/Anon1.png","https://i.postimg.cc/MZ451dgp/Anon2.png","https://i.postimg.cc/KjK5dM3b/Anon3.png","https://i.postimg.cc/RhjT9ZwH/Anon3B.png","https://i.postimg.cc/3xQZcW8M/Anon4.png","https://i.postimg.cc/fR7vnZyV/Anon5.png","https://i.postimg.cc/zf0Svjn5/Anon6.png","https://i.postimg.cc/d0qjJXZ4/Anon7.png","https://i.postimg.cc/FHfmBm43/Anon8.png"], size: 1.1, spinSpeed: 220, pairId:"8eQTQLnBmEgeY9avVjrqqgX8ZVr8MRFrXEHpMrx6DGff", supply: 1000000000 },
+  { name: "Bagz", frames: ["https://yourhost.com/Bagz1.png","https://yourhost.com/Bagz2.png","https://yourhost.com/Bagz3.png","https://yourhost.com/Bagz4.png","https://yourhost.com/Bagz5.png"], size: 1.2, spinSpeed: 220, pairId:"PUT_DEXSCREENER_PAIR_ID_HERE", supply: 1000000000 }
 ];
 
 let currentCharIndex = 0;
@@ -200,13 +190,16 @@ function setCharacter() {
   const char = characters[currentCharIndex];
   currentFrame = 0;
   character.src = char.frames[currentFrame];
-  character.style.width = 350 * char.size + "px";
-  character.style.height = 350 * char.size + "px";
 
-  // Set title text (fixed position in CSS handles placement)
+  // Responsive character scaling
+  const baseSize = Math.min(window.innerWidth, window.innerHeight);
+  const charScale = char.size * 0.35;
+  character.style.width = baseSize * charScale + "px";
+  character.style.height = "auto";
+
   let title = FORCE_UPPERCASE ? char.name.toUpperCase() : char.name;
   charName.textContent = title;
-  if(ENABLE_TITLE_EFFECTS){
+  if (ENABLE_TITLE_EFFECTS) {
     let effect = EFFECTS_POOL[Math.floor(Math.random() * EFFECTS_POOL.length)];
     charName.className = "show " + effect;
   } else {
@@ -226,8 +219,6 @@ async function updatePrice(char){
     const data = await res.json();
     const price = data.pair?.priceUsd ? parseFloat(data.pair.priceUsd).toFixed(6) : "0.000000";
     const mcap = char.supply ? (char.supply * parseFloat(price)).toLocaleString(undefined, {maximumFractionDigits:0}) : "0";
-
-    // Only show price and MCAP
     priceContainer.innerHTML = `Price: $${price} | MCAP: $${mcap}`;
   } catch(err){
     priceContainer.innerText = "Price unavailable";
@@ -270,7 +261,6 @@ canvas.height = height;
 
 const numFlakes = 120;
 const flakes = [];
-
 function createFlakes() {
   for(let i=0;i<numFlakes;i++){
     flakes.push({ x: Math.random()*width, y: Math.random()*height, radius: Math.random()*3+1, speed: Math.random()*1.5+0.5, drift: Math.random()*1.5-0.75, opacity: Math.random()*0.8+0.2 });
@@ -299,7 +289,13 @@ function updateFlakes() {
   }
 }
 function animateSnow(){ drawFlakes(); requestAnimationFrame(animateSnow); }
-window.addEventListener("resize", () => { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; });
+window.addEventListener("resize", () => { 
+  width = window.innerWidth; 
+  height = window.innerHeight; 
+  canvas.width = width; 
+  canvas.height = height; 
+  setCharacter(); // resize character
+});
 
 createFlakes();
 animateSnow();
