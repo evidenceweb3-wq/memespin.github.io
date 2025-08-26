@@ -64,45 +64,30 @@
   .glow{ filter: drop-shadow(0 0 15px #fff) drop-shadow(0 0 30px #fff) }
 
   /* Arrows */
-.arrowBtn{
-  position: fixed;
-  top:50%;
-  transform:translateY(-50%);
-  font-size:var(--control-size);
-  padding:8px 12px;
-  background: rgba(0,0,0,0.18);
-  border: none;
+.arrowBtn,
+.leftControls button {
+  background: none;       /* remove background */
+  border: none;           /* remove border */
+  box-shadow: none;       /* remove shadow */
+  padding: 0;             /* remove extra padding */
+  font-size: var(--control-size); /* uniform emoji size */
+  cursor: pointer;
   color: #fff;
-  border-radius: none;
-  z-index:12;
-  cursor:pointer;
-  box-shadow: none; /* add this to remove shadow */
+  position: fixed;        /* keep positioning */
+  z-index: 12;
 }
-.arrowBtn.left{ left: var(--arrow-offset); }
-.arrowBtn.right{ right: var(--arrow-offset); }
 
-/* Left stacked controls under left arrow */
-.leftControls{
+.arrowBtn.left { left: var(--arrow-offset); top: 50%; transform: translateY(-50%); }
+.arrowBtn.right { right: var(--arrow-offset); top: 50%; transform: translateY(-50%); }
+
+.leftControls {
   position: fixed;
   left: var(--arrow-offset);
   top: calc(50% + 70px);
-  transform: translateY(0);
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  z-index:12;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-.leftControls button{
-  background: rgba(255,255,255,0.06);
-  border: none;
-  color: #fff;
-  padding: 8px 12px;
-  border-radius:10px;
-  font-size: clamp(14px, 3.5vw, 20px);
-  cursor: pointer;
-  box-shadow:none; /* already here */
-}
-.leftControls button:active{ transform: scale(.98); }
 
   /* Remove central big control area (kept for accessibility if needed) */
 
@@ -159,7 +144,7 @@
 
   // ===== Characters (KEEP SENSITIVE DATA) =====
   const characters = [
-    { name: "Bii09e", frames: [
+    { name: "B9e", frames: [
       "https://i.postimg.cc/0Nnd1g1C/UnoRe.png",
       "https://i.postimg.cc/KYxrWGwz/DosRe.png",
       "https://i.postimg.cc/654021C9/TresRe.png",
@@ -339,6 +324,7 @@
 </script>
 </body>
 </html>
+
 
 
 
