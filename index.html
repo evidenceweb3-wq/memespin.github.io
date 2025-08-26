@@ -20,7 +20,7 @@
     --logo-bottom-w: clamp(200px, 26vw, 340px);
     --ui-gap: clamp(6px, 2vw, 12px);
 
-    --char-base: min(220vmin, 360px);
+    --char-base: min(300vmin, 360px);
     --safe-top: clamp(110px, 20vh, 220px);
     --safe-bottom: clamp(110px, 20vh, 220px);
   }
@@ -57,8 +57,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-
+  
   /* Character centered area */
   #characterWrap{ position: fixed; inset: var(--safe-top) 0 var(--safe-bottom) 0; display:grid; place-items:center; z-index:6; pointer-events:none }
   #character{ max-width: calc(var(--char-base)); max-height:100%; width: calc(var(--char-base) * var(--char-size, 1)); height:auto; object-fit:contain; transition: transform .22s ease, filter .22s ease; pointer-events:auto }
@@ -309,6 +308,7 @@
 </script>
 </body>
 </html>
+
 
 
 
