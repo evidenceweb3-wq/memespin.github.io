@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Character Turnaround</title>
 <style>
-/* ===== BODY & BACKGROUND ===== */
 body {
   background: 
     linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0) 20%),
@@ -21,131 +20,64 @@ body {
   transition: background 0.5s ease;
 }
 
-/* ===== FIXED ELEMENTS ===== */
-#topLogo {
-  position: fixed;
-  top: 4vh;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-}
+/* FIXED ELEMENTS */
+#topLogo { position: fixed; top: 4vh; left: 50%; transform: translateX(-50%); z-index: 10; }
+#logo { position: fixed; bottom: 4vh; left: 50%; transform: translateX(-50%); z-index: 10; }
 
-#logo {
-  position: fixed;
-  bottom: 4vh;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-}
-
-/* ===== TITLE AND PRICE ===== */
+/* TITLE & PRICE */
 #charName {
-  position: fixed;
-  top: 12vh;
-  left: 50%;
-  transform: translateX(-50%);
-  font-weight: 800;
-  color: white;
-  text-shadow: 2px 2px 0.5vw rgba(0,0,0,0.7);
-  z-index: 10;
+  position: fixed; top: 12vh; left: 50%; transform: translateX(-50%);
+  font-weight: 800; color: white;
+  text-shadow: 2px 2px 0.5vw rgba(0,0,0,0.7); z-index: 10;
   text-align: center;
 }
-
 #priceContainer {
-  position: fixed;
-  top: 20vh;
-  left: 50%;
-  transform: translateX(-50%);
-  color: #fff;
-  text-shadow: 1px 1px 0.3vw rgba(0,0,0,0.7);
-  z-index: 10;
-  text-align: center;
+  position: fixed; top: 20vh; left: 50%; transform: translateX(-50%);
+  color: #fff; text-shadow: 1px 1px 0.3vw rgba(0,0,0,0.7);
+  z-index: 10; text-align: center;
 }
 
-/* ===== CHARACTER ===== */
+/* CHARACTER */
 #character {
-  object-fit: contain;
-  z-index: 2;
+  object-fit: contain; z-index: 2;
   transition: filter 0.3s ease, transform 0.3s ease;
-  position: fixed;
-  top: 50%;
-  left: 50%;
+  position: fixed; top: 50%; left: 50%;
   transform: translate(-50%, -50%);
 }
+.glow { filter: drop-shadow(0 0 1vw #fff) drop-shadow(0 0 2vw #fff); }
 
-.glow {
-  filter: drop-shadow(0 0 1vw #fff) drop-shadow(0 0 2vw #fff);
-}
-
-/* ===== ACTION BUTTONS ===== */
+/* ACTION BUTTONS */
 #buttons {
-  position: fixed;
-  bottom: 12vh;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 4vw;
-  justify-content: center;
-  z-index: 10;
+  position: fixed; bottom: 12vh; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 4vw; justify-content: center; z-index: 10;
 }
+button { background: none; border: none; cursor: pointer; outline: none; transition: transform 0.2s ease; touch-action: manipulation; }
 
-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  outline: none;
-  transition: transform 0.2s ease;
-  touch-action: manipulation;
-}
+/* ARROW BUTTONS */
+.arrowBtn.left { position: fixed; top: 50%; left: 5vw; transform: translateY(-50%); z-index: 10; }
+.arrowBtn.right { position: fixed; top: 50%; right: 5vw; transform: translateY(-50%); z-index: 10; }
 
-/* ===== ARROW BUTTONS ===== */
-.arrowBtn.left {
-  position: fixed;
-  top: 50%;
-  left: 5vw;
-  transform: translateY(-50%);
-  z-index: 10;
-}
-
-.arrowBtn.right {
-  position: fixed;
-  top: 50%;
-  right: 5vw;
-  transform: translateY(-50%);
-  z-index: 10;
-}
-
-/* ===== SNOW CANVAS ===== */
-.snowCanvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-}
+/* SNOW */
+.snowCanvas { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
 </style>
 </head>
 <body>
 
 <canvas class="snowCanvas" id="snowCanvas"></canvas>
 
-<!-- Fixed Logos, Buttons -->
 <img id="topLogo" src="https://i.postimg.cc/J4jjNvTq/memspin1.png" alt="Top Logo">
 <img id="logo" src="https://i.postimg.cc/Jhbq2Yzd/power2f.png" alt="Bottom Logo">
+
 <div id="buttons">
   <button id="turnBtn">🔄</button>
   <button id="effectBtn">✨</button>
   <button id="paintBtn">🎨</button>
 </div>
 
-<!-- Character Title, Character, Price -->
 <div id="charName"></div>
 <img id="character" src="" alt="Character">
 <div id="priceContainer">Loading price...</div>
 
-<!-- Arrow Navigation -->
 <button class="arrowBtn left" id="prevChar">⬅️</button>
 <button class="arrowBtn right" id="nextChar">➡️</button>
 
@@ -154,10 +86,9 @@ const FORCE_UPPERCASE = true;
 const ENABLE_TITLE_EFFECTS = true;
 const EFFECTS_POOL = ["effect-rainbow","effect-glitch","effect-flicker","effect-shadowPulse"];
 
-// ===== CHARACTERS =====
 const characters = [
-  { name: "Billie", frames: ["https://i.postimg.cc/0Nnd1g1C/UnoRe.png","https://i.postimg.cc/KYxrWGwz/DosRe.png","https://i.postimg.cc/654021C9/TresRe.png","https://i.postimg.cc/cLqcQMcf/CuatroRe.png","https://i.postimg.cc/YC1z8GXZ/CincoRe.png"], size: 0.95, spinSpeed: 230, pairId:"GNEqyxGV9u8Hz5G3RX1VxUfWCQFuXEP2ckmbLxe1bmyf", supply: 999940952 },
-  { name: "Finn", frames: ["https://i.postimg.cc/nLyzPYHZ/FinnUNO.png","https://i.postimg.cc/gksx2ZKq/FINNDOS.png","https://i.postimg.cc/7LGh9Qrm/FINNTRES.png","https://i.postimg.cc/hPcJnrVt/FINNCUATRO.png","https://i.postimg.cc/65PyZNDy/FINNCINCO.png","https://i.postimg.cc/13zfn3Cx/FINNSEIS.png","https://i.postimg.cc/yYpSTRS6/FINNSIETE.png","https://i.postimg.cc/prYp8hMv/FINNOCHO.png"], size: 1.25, spinSpeed: 210, pairId:"3kZxw7r663dNYqbw8zGCK7NRrcBMXMcRnv3heak4F7mC", supply: 985377686 },
+  { name: "Pepe", frames: ["https://i.postimg.cc/0Nnd1g1C/UnoRe.png","https://i.postimg.cc/KYxrWGwz/DosRe.png","https://i.postimg.cc/654021C9/TresRe.png","https://i.postimg.cc/cLqcQMcf/CuatroRe.png","https://i.postimg.cc/YC1z8GXZ/CincoRe.png"], size: 0.95, spinSpeed: 230, pairId:"GNEqyxGV9u8Hz5G3RX1VxUfWCQFuXEP2ckmbLxe1bmyf", supply: 999940952 },
+  { name: "Finn", frames: ["https://i.postimg.cc/nLyzPYHZ/FinnUNO.png","https://i.postimg.cc/gksx2ZKq/FINNDOS.png","https://i.postimg.cc/7LGh9Qrm/FINNTRES.png","https://i.postimg.cc/hPcJnrVt/FINNCUATRO.png","https://i.postimg.cc/65PyZNDy/FINNCINCO.png","https://i.postimg.cc/13zfn3Cx/FINNSEIS.png","https://i.postimg.cc/yYpSTRS6/FINNSIETE.png","https://i.postimg.cc/prYp8hMv/FINNOCHO.png"], size: 0.8, spinSpeed: 210, pairId:"3kZxw7r663dNYqbw8zGCK7NRrcBMXMcRnv3heak4F7mC", supply: 985377686 },
   { name: "Nippie", frames: ["https://i.postimg.cc/5y4Zq3Pn/NIPPIE1.png","https://i.postimg.cc/sX9kh8JM/NIPPIE2.png","https://i.postimg.cc/nzJ8MZq8/NIPPIE3.png","https://i.postimg.cc/wMwnWmZH/NIPPIE4.png","https://i.postimg.cc/T2Q82zwS/NIPPIE5.png","https://i.postimg.cc/kX502TR5/NIPPIE6.png"], size: 1.1, spinSpeed: 220, pairId:"ENYbntd3KgJJJvMqbe5Awtqu8jkVjnczU8TK46q3odnG", supply: 954759985 },
   { name: "Anon", frames: ["https://i.postimg.cc/yYZPj0zX/Anon1.png","https://i.postimg.cc/MZ451dgp/Anon2.png","https://i.postimg.cc/KjK5dM3b/Anon3.png","https://i.postimg.cc/RhjT9ZwH/Anon3B.png","https://i.postimg.cc/3xQZcW8M/Anon4.png","https://i.postimg.cc/fR7vnZyV/Anon5.png","https://i.postimg.cc/zf0Svjn5/Anon6.png","https://i.postimg.cc/d0qjJXZ4/Anon7.png","https://i.postimg.cc/FHfmBm43/Anon8.png"], size: 1.1, spinSpeed: 220, pairId:"8eQTQLnBmEgeY9avVjrqqgX8ZVr8MRFrXEHpMrx6DGff", supply: 1000000000 },
   { name: "Bagz", frames: ["https://i.postimg.cc/76DxBpz7/Bagz1.png","https://i.postimg.cc/Qd2N7Bxf/Bagz2.png","https://i.postimg.cc/fRtTk7Z3/Bagz3.png","https://i.postimg.cc/QMc8JXFh/Bagz4.png"], size: 1.2, spinSpeed: 220, pairId:"4MzZA4pqd7HqU9gQKuLSwtC5nUxFpmw5PvRmGoSGMNxF", supply: 1000000000 }
@@ -176,11 +107,10 @@ const nextChar = document.getElementById("nextChar");
 const charName = document.getElementById("charName");
 const priceContainer = document.getElementById("priceContainer");
 
-// Preload frames
+// Preload images
 characters.forEach(char => char.frames.forEach(src => { const img = new Image(); img.src = src; }));
 
 // ===== GLOBAL SCALE SYSTEM =====
-const BASE_WIDTH = 1440; // reference screen width
 const BASE_CHAR = 400;
 const BASE_TOPLOGO = 350;
 const BASE_BOTTOMLOGO = 320;
@@ -189,7 +119,8 @@ const BASE_PRICE = 28;
 const BASE_BTN = 80;
 
 function getScale() {
-  return Math.min(window.innerWidth / BASE_WIDTH, 1);
+  let scale = Math.sqrt(window.innerWidth / 1440);
+  return Math.min(Math.max(scale, 0.6), 1); // clamp between 0.6 and 1
 }
 
 function setSizes() {
@@ -209,44 +140,35 @@ function setSizes() {
   buttons.forEach(btn => btn.style.fontSize = (BASE_BTN * scale) + "px");
 }
 
-// ===== CHARACTER SET =====
+// ===== CHARACTER FUNCTIONS =====
 function setCharacter() {
   const char = characters[currentCharIndex];
   currentFrame = 0;
   character.src = char.frames[currentFrame];
+  setSizes();
 
   let title = FORCE_UPPERCASE ? char.name.toUpperCase() : char.name;
   charName.textContent = title;
-  if (ENABLE_TITLE_EFFECTS) {
+  if(ENABLE_TITLE_EFFECTS){
     let effect = EFFECTS_POOL[Math.floor(Math.random() * EFFECTS_POOL.length)];
     charName.className = "show " + effect;
-  } else {
-    charName.className = "show";
-  }
+  } else { charName.className = "show"; }
 
   updatePrice(char);
-  setSizes();
 }
 
-// ===== UPDATE PRICE =====
 async function updatePrice(char){
-  if(!char.pairId) { 
-    priceContainer.innerText = "Price unavailable"; 
-    return; 
-  }
+  if(!char.pairId) { priceContainer.innerText = "Price unavailable"; return; }
   try{
     const res = await fetch(`https://api.dexscreener.com/latest/dex/pairs/solana/${char.pairId}`);
     const data = await res.json();
     const price = data.pair?.priceUsd ? parseFloat(data.pair.priceUsd).toFixed(6) : "0.000000";
     const mcap = char.supply ? (char.supply * parseFloat(price)).toLocaleString(undefined, {maximumFractionDigits:0}) : "0";
     priceContainer.innerHTML = `Price: $${price} | MCAP: $${mcap}`;
-  } catch(err){
-    priceContainer.innerText = "Price unavailable";
-    console.error(err);
-  }
+  } catch(err){ priceContainer.innerText = "Price unavailable"; console.error(err); }
 }
 
-// ===== SPIN & EFFECTS =====
+// Spin button
 function updateFrame() {
   const char = characters[currentCharIndex];
   currentFrame = (currentFrame + 1) % char.frames.length;
@@ -258,69 +180,43 @@ turnBtn.addEventListener("mouseup", () => clearInterval(intervalId));
 turnBtn.addEventListener("mouseleave", () => clearInterval(intervalId));
 turnBtn.addEventListener("touchstart", (e) => { e.preventDefault(); const char = characters[currentCharIndex]; intervalId = setInterval(updateFrame, char.spinSpeed); });
 turnBtn.addEventListener("touchend", () => clearInterval(intervalId));
+
 effectBtn.addEventListener("click", () => character.classList.toggle("glow"));
+paintBtn.addEventListener("click", () => { 
+  const hues = ["#a25647","#4a90e2","#f5a623","#7ed321","#9b59b6"];
+  const hueIndex = Math.floor(Math.random()*hues.length);
+  document.body.style.background = hues[hueIndex];
+});
 
-// Background colors
-const hues = ["#a25647", "#4a90e2", "#f5a623", "#7ed321", "#9b59b6"];
-let hueIndex = 0;
-paintBtn.addEventListener("click", () => { hueIndex = (hueIndex + 1) % hues.length; document.body.style.background = hues[hueIndex]; });
-
-// Character navigation
 prevChar.addEventListener("click", () => { currentCharIndex = (currentCharIndex - 1 + characters.length) % characters.length; setCharacter(); });
 nextChar.addEventListener("click", () => { currentCharIndex = (currentCharIndex + 1) % characters.length; setCharacter(); });
 
-// ===== SNOW EFFECT =====
+// ===== SNOW =====
 const canvas = document.getElementById("snowCanvas");
 const ctx = canvas.getContext("2d");
-let width = window.innerWidth;
-let height = window.innerHeight;
-canvas.width = width;
-canvas.height = height;
-
+let width = window.innerWidth, height = window.innerHeight;
+canvas.width = width; canvas.height = height;
 const numFlakes = 120;
 const flakes = [];
 function createFlakes() {
-  for(let i=0;i<numFlakes;i++){
-    flakes.push({ x: Math.random()*width, y: Math.random()*height, radius: Math.random()*3+1, speed: Math.random()*1.5+0.5, drift: Math.random()*1.5-0.75, opacity: Math.random()*0.8+0.2 });
-  }
+  for(let i=0;i<numFlakes;i++){ flakes.push({x:Math.random()*width,y:Math.random()*height,radius:Math.random()*3+1,speed:Math.random()*1.5+0.5,drift:Math.random()*1.5-0.75,opacity:Math.random()*0.8+0.2}); }
 }
 function drawFlakes() {
-  ctx.clearRect(0,0,width,height);
-  ctx.fillStyle = "white";
-  ctx.beginPath();
-  for(let flake of flakes){
-    ctx.globalAlpha = flake.opacity;
-    ctx.moveTo(flake.x,flake.y);
-    ctx.arc(flake.x,flake.y,flake.radius,0,Math.PI*2);
-  }
-  ctx.fill();
-  ctx.globalAlpha = 1;
-  updateFlakes();
+  ctx.clearRect(0,0,width,height); ctx.fillStyle="white"; ctx.beginPath();
+  for(let flake of flakes){ ctx.globalAlpha=flake.opacity; ctx.moveTo(flake.x,flake.y); ctx.arc(flake.x,flake.y,flake.radius,0,Math.PI*2); }
+  ctx.fill(); ctx.globalAlpha=1; updateFlakes();
 }
-function updateFlakes() {
-  for(let flake of flakes){
-    flake.y += flake.speed;
-    flake.x += flake.drift;
-    if(flake.y>height){ flake.y=0; flake.x=Math.random()*width; }
-    if(flake.x>width) flake.x=0;
-    if(flake.x<0) flake.x=width;
-  }
-}
+function updateFlakes() { for(let flake of flakes){ flake.y+=flake.speed; flake.x+=flake.drift; if(flake.y>height){flake.y=0;flake.x=Math.random()*width;} if(flake.x>width) flake.x=0; if(flake.x<0) flake.x=width; } }
 function animateSnow(){ drawFlakes(); requestAnimationFrame(animateSnow); }
+createFlakes(); animateSnow();
 
 // ===== RESIZE HANDLER =====
 window.addEventListener("resize", () => { 
-  width = window.innerWidth; 
-  height = window.innerHeight; 
-  canvas.width = width; 
-  canvas.height = height; 
-  setCharacter(); 
+  width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; 
+  setSizes(); 
 });
 
-createFlakes();
-animateSnow();
 setCharacter();
 </script>
-
 </body>
 </html>
