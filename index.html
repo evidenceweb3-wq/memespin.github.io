@@ -85,10 +85,25 @@
   left: var(--arrow-offset);
   top: calc(50% + 70px);
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex-direction: column;  /* vertical stack */
+  gap: 12px;               /* spacing between buttons */
+  z-index: 12;
 }
 
+.leftControls button {
+  background: none;       /* just emoji */
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  font-size: var(--control-size); /* size of emoji */
+  cursor: pointer;
+  color: #fff;
+  width: auto;            /* allow emoji to take natural width */
+  height: auto;           /* allow natural height */
+  display: inline-flex;   /* keep buttons visible */
+  justify-content: center;
+  align-items: center;
+}
   /* Remove central big control area (kept for accessibility if needed) */
 
   /* Snow canvas */
@@ -144,7 +159,7 @@
 
   // ===== Characters (KEEP SENSITIVE DATA) =====
   const characters = [
-    { name: "B9e", frames: [
+    { name: "poper", frames: [
       "https://i.postimg.cc/0Nnd1g1C/UnoRe.png",
       "https://i.postimg.cc/KYxrWGwz/DosRe.png",
       "https://i.postimg.cc/654021C9/TresRe.png",
@@ -324,6 +339,7 @@
 </script>
 </body>
 </html>
+
 
 
 
