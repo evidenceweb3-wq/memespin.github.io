@@ -1,226 +1,299 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Character Turnaround</title>
 <style>
-body {
-  background: 
-    linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0) 20%),
-    linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.4) 100%),
-    #a25647;
-  background-blend-mode: overlay;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-  font-family: "Segoe UI", sans-serif;
-  overflow: hidden;
-  transition: background 0.5s ease;
-}
+  :root{
+    --bg-base: #a25647;
+    --bg-grad-1: rgba(255,255,255,0.30);
+    --bg-grad-2: rgba(255,255,255,0.00);
+    --bg-grad-3: rgba(0,0,0,0.00);
+    --bg-grad-4: rgba(0,0,0,0.40);
 
-/* FIXED ELEMENTS */
-#topLogo { position: fixed; top: 4vh; left: 50%; transform: translateX(-50%); z-index: 10; }
-#logo { position: fixed; bottom: 4vh; left: 50%; transform: translateX(-50%); z-index: 10; }
+    --title-size: clamp(22px, 4.5vw, 44px);
+    --price-size: clamp(12px, 2.7vw, 18px);
+    --control-size: clamp(28px, 6vw, 50px);
+    --arrow-offset: clamp(14px, 5vw, 64px);
+    --logo-top-w: clamp(260px, 26vw, 340px);
+    --logo-bottom-w: clamp(160px, 26vw, 340px);
+    --ui-gap: clamp(6px, 2vw, 12px);
 
-/* TITLE & PRICE */
-#charName {
-  position: fixed; top: 12vh; left: 50%; transform: translateX(-50%);
-  font-weight: 800; color: white;
-  text-shadow: 2px 2px 0.5vw rgba(0,0,0,0.7); z-index: 10;
-  text-align: center;
-}
-#priceContainer {
-  position: fixed; top: 20vh; left: 50%; transform: translateX(-50%);
-  color: #fff; text-shadow: 1px 1px 0.3vw rgba(0,0,0,0.7);
-  z-index: 10; text-align: center;
-}
+    --char-base: min(70vmin, 520px);
+    --safe-top: clamp(110px, 20vh, 220px);
+    --safe-bottom: clamp(110px, 20vh, 220px);
+  }
 
-/* CHARACTER */
-#character {
-  object-fit: contain; z-index: 2;
-  transition: filter 0.3s ease, transform 0.3s ease;
-  position: fixed; top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-}
-.glow { filter: drop-shadow(0 0 1vw #fff) drop-shadow(0 0 2vw #fff); }
+  html, body { height: 100%; }
+  body{
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    background:
+      linear-gradient(to bottom, var(--bg-grad-1), var(--bg-grad-2) 20%),
+      linear-gradient(to bottom, var(--bg-grad-3) 40%, var(--bg-grad-4) 100%),
+      var(--bg-base);
+    background-blend-mode: overlay;
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
+  }
 
-/* ACTION BUTTONS */
-#buttons {
-  position: fixed; bottom: 12vh; left: 50%; transform: translateX(-50%);
-  display: flex; gap: 4vw; justify-content: center; z-index: 10;
-}
-button { background: none; border: none; cursor: pointer; outline: none; transition: transform 0.2s ease; touch-action: manipulation; }
+  /* Logos and header */
+  #topLogo{ width: var(--logo-top-w); position: fixed; top: max(28px, env(safe-area-inset-top)); left:50%; transform:translateX(-50%); z-index:12; pointer-events:none }
+  #logo{ width: var(--logo-bottom-w); position: fixed; bottom: calc(max(18px, env(safe-area-inset-bottom)) + 6px); left:50%; transform:translateX(-50%); z-index:12; pointer-events:none }
 
-/* ARROW BUTTONS */
-.arrowBtn.left { position: fixed; top: 50%; left: 5vw; transform: translateY(-50%); z-index: 10; }
-.arrowBtn.right { position: fixed; top: 50%; right: 5vw; transform: translateY(-50%); z-index: 10; }
+  #charName{ position: fixed; top: calc(max(8px, env(safe-area-inset-top)) + 70px); left:50%; transform:translateX(-50%); font-size:var(--title-size); font-weight:800; text-align:center; z-index:12; text-shadow: 2px 2px 8px rgba(0,0,0,0.6); }
+  #priceContainer{ position: fixed; top: calc(max(8px, env(safe-area-inset-top)) + 70px + 42px); left:50%; transform:translateX(-50%); font-size:var(--price-size); z-index:12; text-shadow: 1px 1px 4px rgba(0,0,0,0.6); }
 
-/* SNOW */
-.snowCanvas { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+  /* Character centered area */
+  #characterWrap{ position: fixed; inset: var(--safe-top) 0 var(--safe-bottom) 0; display:grid; place-items:center; z-index:6; pointer-events:none }
+  #character{ max-width: calc(var(--char-base)); max-height:100%; width: calc(var(--char-base) * var(--char-size, 1)); height:auto; object-fit:contain; transition: transform .22s ease, filter .22s ease; pointer-events:auto }
+  .glow{ filter: drop-shadow(0 0 15px #fff) drop-shadow(0 0 30px #fff) }
+
+  /* Arrows */
+  .arrowBtn{ position: fixed; top:50%; transform:translateY(-50%); font-size:var(--control-size); padding:8px 12px; background: rgba(0,0,0,0.18); border: none; color: #fff; border-radius: 10px; z-index:12; cursor:pointer }
+  .arrowBtn.left{ left: var(--arrow-offset) }
+  .arrowBtn.right{ right: var(--arrow-offset) }
+
+  /* Left stacked controls under left arrow */
+  .leftControls{ position: fixed; left: var(--arrow-offset); top: calc(50% + 70px); transform: translateY(0); display:flex; flex-direction:column; gap:10px; z-index:12; }
+  .leftControls button{ background: rgba(255,255,255,0.06); border: none; color: #fff; padding: 8px 12px; border-radius:10px; font-size: clamp(14px, 3.5vw, 20px); cursor: pointer; box-shadow:none }
+  .leftControls button:active{ transform: scale(.98) }
+
+  /* Remove central big control area (kept for accessibility if needed) */
+
+  /* Snow canvas */
+  .snowCanvas{ position: fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:0 }
+
+  /* Title effects */
+  .effect-rainbow{ animation: hue 5s linear infinite }
+  @keyframes hue{ from{filter:hue-rotate(0deg)} to{filter:hue-rotate(360deg)} }
+  .effect-flicker{ animation: flick 1.6s infinite }
+  @keyframes flick{ 0%,19%,21%,100%{opacity:1} 20%,22%{opacity:.4} }
+  .effect-glitch{ position: relative }
+  .effect-glitch::after{ content: attr(data-text); position:absolute; inset:0; left:2px; top:0; text-shadow:-2px 0 rgba(0,255,255,.8); clip-path: inset(0 0 60% 0); animation: glitch 1.5s infinite ease-in-out alternate }
+  @keyframes glitch{ from{ transform: translateX(0)} to{ transform: translateX(1.5px)} }
+  .effect-shadowPulse{ text-shadow:0 0 10px rgba(255,255,255,.85); animation:pulse 2.2s ease-in-out infinite }
+  @keyframes pulse{ 0%,100%{ text-shadow:0 0 8px rgba(255,255,255,.5)} 50%{ text-shadow:0 0 20px rgba(255,255,255,1)} }
+
+  @media (prefers-reduced-motion: reduce){ .effect-rainbow,.effect-flicker,.effect-glitch,.effect-shadowPulse{ animation:none !important } }
 </style>
 </head>
 <body>
+  <!-- Snow layer -->
+  <canvas class="snowCanvas" id="snowCanvas" aria-hidden="true"></canvas>
 
-<canvas class="snowCanvas" id="snowCanvas"></canvas>
+  <!-- Fixed Logos -->
+  <img id="topLogo" src="https://i.postimg.cc/J4jjNvTq/memspin1.png" alt="Top Logo" />
+  <img id="logo"    src="https://i.postimg.cc/Jhbq2Yzd/power2f.png"  alt="Bottom Logo" />
 
-<img id="topLogo" src="https://i.postimg.cc/J4jjNvTq/memspin1.png" alt="Top Logo">
-<img id="logo" src="https://i.postimg.cc/Jhbq2Yzd/power2f.png" alt="Bottom Logo">
+  <!-- Header: Title & Price -->
+  <div id="charName" aria-live="polite"></div>
+  <div id="priceContainer" aria-live="polite">Loading price…</div>
 
-<div id="buttons">
-  <button id="turnBtn">🔄</button>
-  <button id="effectBtn">✨</button>
-  <button id="paintBtn">🎨</button>
-</div>
+  <!-- Character (auto-centered between safe areas) -->
+  <div id="characterWrap">
+    <img id="character" src="" alt="Character" />
+  </div>
 
-<div id="charName"></div>
-<img id="character" src="" alt="Character">
-<div id="priceContainer">Loading price...</div>
+  <!-- Left stacked controls under left arrow -->
+  <div class="leftControls" role="group" aria-label="Character controls">
+    <button id="turnBtn" title="Spin">🔄</button>
+    <button id="effectBtn" title="Glow on/off">✨</button>
+    <button id="paintBtn" title="Change background">🎨</button>
+  </div>
 
-<button class="arrowBtn left" id="prevChar">⬅️</button>
-<button class="arrowBtn right" id="nextChar">➡️</button>
+  <!-- Arrow Navigation -->
+  <button class="arrowBtn left"  id="prevChar" title="Previous">⬅️</button>
+  <button class="arrowBtn right" id="nextChar" title="Next">➡️</button>
 
 <script>
-const FORCE_UPPERCASE = true;
-const ENABLE_TITLE_EFFECTS = true;
-const EFFECTS_POOL = ["effect-rainbow","effect-glitch","effect-flicker","effect-shadowPulse"];
+  // ===== Config toggles =====
+  const FORCE_UPPERCASE = true;
+  const ENABLE_TITLE_EFFECTS = true;
+  const EFFECTS_POOL = ["effect-rainbow","effect-glitch","effect-flicker","effect-shadowPulse"];
 
-const characters = [
-  { name: "Billie", frames: ["https://i.postimg.cc/0Nnd1g1C/UnoRe.png","https://i.postimg.cc/KYxrWGwz/DosRe.png","https://i.postimg.cc/654021C9/TresRe.png","https://i.postimg.cc/cLqcQMcf/CuatroRe.png","https://i.postimg.cc/YC1z8GXZ/CincoRe.png"], size: 0.95, spinSpeed: 230, pairId:"GNEqyxGV9u8Hz5G3RX1VxUfWCQFuXEP2ckmbLxe1bmyf", supply: 999940952 },
-  { name: "Finn", frames: ["https://i.postimg.cc/nLyzPYHZ/FinnUNO.png","https://i.postimg.cc/gksx2ZKq/FINNDOS.png","https://i.postimg.cc/7LGh9Qrm/FINNTRES.png","https://i.postimg.cc/hPcJnrVt/FINNCUATRO.png","https://i.postimg.cc/65PyZNDy/FINNCINCO.png","https://i.postimg.cc/13zfn3Cx/FINNSEIS.png","https://i.postimg.cc/yYpSTRS6/FINNSIETE.png","https://i.postimg.cc/prYp8hMv/FINNOCHO.png"], size: 1.25, spinSpeed: 210, pairId:"3kZxw7r663dNYqbw8zGCK7NRrcBMXMcRnv3heak4F7mC", supply: 985377686 },
-  { name: "Nippie", frames: ["https://i.postimg.cc/5y4Zq3Pn/NIPPIE1.png","https://i.postimg.cc/sX9kh8JM/NIPPIE2.png","https://i.postimg.cc/nzJ8MZq8/NIPPIE3.png","https://i.postimg.cc/wMwnWmZH/NIPPIE4.png","https://i.postimg.cc/T2Q82zwS/NIPPIE5.png","https://i.postimg.cc/kX502TR5/NIPPIE6.png"], size: 1.1, spinSpeed: 220, pairId:"ENYbntd3KgJJJvMqbe5Awtqu8jkVjnczU8TK46q3odnG", supply: 954759985 },
-  { name: "Anon", frames: ["https://i.postimg.cc/yYZPj0zX/Anon1.png","https://i.postimg.cc/MZ451dgp/Anon2.png","https://i.postimg.cc/KjK5dM3b/Anon3.png","https://i.postimg.cc/RhjT9ZwH/Anon3B.png","https://i.postimg.cc/3xQZcW8M/Anon4.png","https://i.postimg.cc/fR7vnZyV/Anon5.png","https://i.postimg.cc/zf0Svjn5/Anon6.png","https://i.postimg.cc/d0qjJXZ4/Anon7.png","https://i.postimg.cc/FHfmBm43/Anon8.png"], size: 1.1, spinSpeed: 220, pairId:"8eQTQLnBmEgeY9avVjrqqgX8ZVr8MRFrXEHpMrx6DGff", supply: 1000000000 },
-  { name: "Bagz", frames: ["https://i.postimg.cc/76DxBpz7/Bagz1.png","https://i.postimg.cc/Qd2N7Bxf/Bagz2.png","https://i.postimg.cc/fRtTk7Z3/Bagz3.png","https://i.postimg.cc/QMc8JXFh/Bagz4.png"], size: 1.2, spinSpeed: 220, pairId:"PUT_DEXSCREENER_PAIR_ID_HERE", supply: 1000000000 }
-];
+  // ===== Characters (KEEP SENSITIVE DATA) =====
+  const characters = [
+    { name: "Billie", frames: [
+      "https://i.postimg.cc/0Nnd1g1C/UnoRe.png",
+      "https://i.postimg.cc/KYxrWGwz/DosRe.png",
+      "https://i.postimg.cc/654021C9/TresRe.png",
+      "https://i.postimg.cc/cLqcQMcf/CuatroRe.png",
+      "https://i.postimg.cc/YC1z8GXZ/CincoRe.png"
+    ], size: 1.05, spinSpeed: 230, pairId:"GNEqyxGV9u8Hz5G3RX1VxUfWCQFuXEP2ckmbLxe1bmyf", supply: 999940952 },
 
-let currentCharIndex = 0;
-let currentFrame = 0;
-let intervalId;
+    { name: "Bagz", frames: [
+      "https://i.postimg.cc/76DxBpz7/Bagz1.png",
+      "https://i.postimg.cc/Qd2N7Bxf/Bagz2.png",
+      "https://i.postimg.cc/fRtTk7Z3/Bagz3.png",
+      "https://i.postimg.cc/QMc8JXFh/Bagz4.png",
+    ], size: 1.0, spinSpeed: 220, pairId: "4MzZA4pqd7HqU9gQKuLSwtC5nUxFpmw5PvRmGoSGMNxF", supply: 1000000000 },
 
-const character = document.getElementById("character");
-const turnBtn = document.getElementById("turnBtn");
-const effectBtn = document.getElementById("effectBtn");
-const paintBtn = document.getElementById("paintBtn");
-const prevChar = document.getElementById("prevChar");
-const nextChar = document.getElementById("nextChar");
-const charName = document.getElementById("charName");
-const priceContainer = document.getElementById("priceContainer");
+    { name: "Finn", frames: [
+      "https://i.postimg.cc/nLyzPYHZ/FinnUNO.png",
+      "https://i.postimg.cc/gksx2ZKq/FINNDOS.png",
+      "https://i.postimg.cc/7LGh9Qrm/FINNTRES.png",
+      "https://i.postimg.cc/hPcJnrVt/FINNCUATRO.png",
+      "https://i.postimg.cc/65PyZNDy/FINNCINCO.png",
+      "https://i.postimg.cc/13zfn3Cx/FINNSEIS.png",
+      "https://i.postimg.cc/yYpSTRS6/FINNSIETE.png",
+      "https://i.postimg.cc/prYp8hMv/FINNOCHO.png"
+    ], size: 0.90, spinSpeed: 210, pairId:"3kZxw7r663dNYqbw8zGCK7NRrcBMXMcRnv3heak4F7mC", supply: 985377686 },
 
-// Preload images
-characters.forEach(char => char.frames.forEach(src => { const img = new Image(); img.src = src; }));
+    { name: "Nippie", frames: [
+      "https://i.postimg.cc/5y4Zq3Pn/NIPPIE1.png",
+      "https://i.postimg.cc/sX9kh8JM/NIPPIE2.png",
+      "https://i.postimg.cc/nzJ8MZq8/NIPPIE3.png",
+      "https://i.postimg.cc/wMwnWmZH/NIPPIE4.png",
+      "https://i.postimg.cc/T2Q82zwS/NIPPIE5.png",
+      "https://i.postimg.cc/kX502TR5/NIPPIE6.png"
+    ], size: 0.90, spinSpeed: 220, pairId:"ENYbntd3KgJJJvMqbe5Awtqu8jkVjnczU8TK46q3odnG", supply: 954759985 },
 
-// ===== GLOBAL SCALE SYSTEM =====
-const BASE_CHAR = 400;
-const BASE_TOPLOGO = 350;
-const BASE_BOTTOMLOGO = 320;
-const BASE_TITLE = 60;
-const BASE_PRICE = 28;
-const BASE_BTN = 80;
+    { name: "Anon", frames: [
+      "https://i.postimg.cc/yYZPj0zX/Anon1.png",
+      "https://i.postimg.cc/MZ451dgp/Anon2.png",
+      "https://i.postimg.cc/KjK5dM3b/Anon3.png",
+      "https://i.postimg.cc/RhjT9ZwH/Anon3B.png",
+      "https://i.postimg.cc/3xQZcW8M/Anon4.png",
+      "https://i.postimg.cc/fR7vnZyV/Anon5.png",
+      "https://i.postimg.cc/zf0Svjn5/Anon6.png",
+      "https://i.postimg.cc/d0qjJXZ4/Anon7.png",
+      "https://i.postimg.cc/FHfmBm43/Anon8.png"
+    ], size: 0.80, spinSpeed: 220, pairId:"8eQTQLnBmEgeY9avVjrqqgX8ZVr8MRFrXEHpMrx6DGff", supply: 1000000000 }
+  ];
 
-// Breakpoint-based scale
-function getScale() {
-  const w = window.innerWidth;
-  if(w <= 480) return 0.95;   // mobile
-  if(w <= 768) return 1;      // tablet
-  if(w <= 1200) return 0.95;  // small desktop
-  return 1;                    // large desktop
-}
+  // Per-character fine-tune multipliers (you can tweak these if a character looks too big/small)
+  const characterScaleTweaks = {
+    Billie: 0.78,
+    Bagz: 0.78,
+    Finn: 0.78,
+    Nippie: 0.78,
+    Anon: 0.78
+  };
 
-function setSizes() {
-  const scale = getScale();
-  const char = characters[currentCharIndex];
+  // ===== State =====
+  let currentCharIndex = 0;
+  let currentFrame = 0;
+  let intervalId;
 
-  character.style.width = (BASE_CHAR * char.size * scale) + "px";
-  character.style.height = "auto";
+  // ===== DOM =====
+  const $character = document.getElementById("character");
+  const $turnBtn = document.getElementById("turnBtn");
+  const $effectBtn = document.getElementById("effectBtn");
+  const $paintBtn = document.getElementById("paintBtn");
+  const $prevChar = document.getElementById("prevChar");
+  const $nextChar = document.getElementById("nextChar");
+  const $charName = document.getElementById("charName");
+  const $priceContainer = document.getElementById("priceContainer");
 
-  document.getElementById("topLogo").style.width = (BASE_TOPLOGO * scale) + "px";
-  document.getElementById("logo").style.width = (BASE_BOTTOMLOGO * scale) + "px";
+  // ===== Preload frames =====
+  characters.forEach(char => char.frames.forEach(src => { const img = new Image(); img.src = src; }));
 
-  charName.style.fontSize = (BASE_TITLE * scale) + "px";
-  priceContainer.style.fontSize = (BASE_PRICE * scale) + "px";
+  function getViewportScale(){
+    const w = window.innerWidth;
+    if(w < 480) return 0.68; // small phones
+    if(w < 768) return 0.82; // tablets
+    if(w < 1200) return 0.94; // small desktops
+    return 1; // large
+  }
 
-  const buttons = document.querySelectorAll("#buttons button, .arrowBtn");
-  buttons.forEach(btn => btn.style.fontSize = (BASE_BTN * scale) + "px");
-}
+  function setCharacter(){
+    const ch = characters[currentCharIndex];
+    currentFrame = 0;
+    $character.src = ch.frames[currentFrame];
 
-// ===== CHARACTER FUNCTIONS =====
-function setCharacter() {
-  const char = characters[currentCharIndex];
-  currentFrame = 0;
-  character.src = char.frames[currentFrame];
-  setSizes();
+    // compute effective char size (character's own size * tweak * viewport scale * global shrink)
+    const tweak = characterScaleTweaks[ch.name] ?? 0.78;
+    const effective = ch.size * tweak * getViewportScale();
+    $character.style.setProperty('--char-size', effective);
 
-  let title = FORCE_UPPERCASE ? char.name.toUpperCase() : char.name;
-  charName.textContent = title;
-  if(ENABLE_TITLE_EFFECTS){
-    let effect = EFFECTS_POOL[Math.floor(Math.random() * EFFECTS_POOL.length)];
-    charName.className = "show " + effect;
-  } else { charName.className = "show"; }
+    const title = FORCE_UPPERCASE ? ch.name.toUpperCase() : ch.name;
+    $charName.textContent = title;
+    $charName.dataset.text = title;
 
-  updatePrice(char);
-}
+    if(ENABLE_TITLE_EFFECTS){
+      const effect = EFFECTS_POOL[Math.floor(Math.random() * EFFECTS_POOL.length)];
+      $charName.className = effect;
+    } else {
+      $charName.className = '';
+    }
 
-async function updatePrice(char){
-  if(!char.pairId) { priceContainer.innerText = "Price unavailable"; return; }
-  try{
-    const res = await fetch(`https://api.dexscreener.com/latest/dex/pairs/solana/${char.pairId}`);
-    const data = await res.json();
-    const price = data.pair?.priceUsd ? parseFloat(data.pair.priceUsd).toFixed(6) : "0.000000";
-    const mcap = char.supply ? (char.supply * parseFloat(price)).toLocaleString(undefined, {maximumFractionDigits:0}) : "0";
-    priceContainer.innerHTML = `Price: $${price} | MCAP: $${mcap}`;
-  } catch(err){ priceContainer.innerText = "Price unavailable"; console.error(err); }
-}
+    updatePrice(ch);
+  }
 
-// SPIN BUTTON
-function updateFrame() {
-  const char = characters[currentCharIndex];
-  currentFrame = (currentFrame + 1) % char.frames.length;
-  character.src = char.frames[currentFrame];
-}
-turnBtn.addEventListener("click", updateFrame);
-turnBtn.addEventListener("mousedown", () => { const char = characters[currentCharIndex]; intervalId = setInterval(updateFrame, char.spinSpeed); });
-turnBtn.addEventListener("mouseup", () => clearInterval(intervalId));
-turnBtn.addEventListener("mouseleave", () => clearInterval(intervalId));
-turnBtn.addEventListener("touchstart", (e) => { e.preventDefault(); const char = characters[currentCharIndex]; intervalId = setInterval(updateFrame, char.spinSpeed); });
-turnBtn.addEventListener("touchend", () => clearInterval(intervalId));
+  async function updatePrice(ch){
+    if(!ch.pairId){ $priceContainer.innerText = "Price unavailable"; return; }
+    try{
+      const res = await fetch(`https://api.dexscreener.com/latest/dex/pairs/solana/${ch.pairId}`);
+      const data = await res.json();
+      const price = data.pair?.priceUsd ? parseFloat(data.pair.priceUsd) : 0;
+      const priceStr = price.toFixed(6);
+      const mcap = ch.supply ? (ch.supply * price) : 0;
+      const mcapStr = mcap.toLocaleString(undefined,{ maximumFractionDigits: 0 });
+      $priceContainer.innerHTML = `Price: $${priceStr} | MCAP: $${mcapStr}`;
+    } catch(err){
+      console.error(err);
+      $priceContainer.innerText = "Price unavailable";
+    }
+  }
 
-effectBtn.addEventListener("click", () => character.classList.toggle("glow"));
-paintBtn.addEventListener("click", () => { 
-  const hues = ["#a25647","#4a90e2","#f5a623","#7ed321","#9b59b6"];
-  const hueIndex = Math.floor(Math.random()*hues.length);
-  document.body.style.background = hues[hueIndex];
-});
+  // ===== Spin logic =====
+  function nextFrame(){
+    const ch = characters[currentCharIndex];
+    currentFrame = (currentFrame + 1) % ch.frames.length;
+    $character.src = ch.frames[currentFrame];
+  }
+  function startSpin(){
+    const ch = characters[currentCharIndex];
+    clearInterval(intervalId);
+    intervalId = setInterval(nextFrame, ch.spinSpeed);
+  }
+  function stopSpin(){ clearInterval(intervalId); }
 
-prevChar.addEventListener("click", () => { currentCharIndex = (currentCharIndex - 1 + characters.length) % characters.length; setCharacter(); });
-nextChar.addEventListener("click", () => { currentCharIndex = (currentCharIndex + 1) % characters.length; setCharacter(); });
+  $turnBtn.addEventListener('click', nextFrame);
+  $turnBtn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); startSpin(); });
+  window.addEventListener('pointerup', stopSpin);
+  $turnBtn.addEventListener('pointerleave', stopSpin);
 
-// SNOW EFFECT
-const canvas = document.getElementById("snowCanvas");
-const ctx = canvas.getContext("2d");
-let width = window.innerWidth, height = window.innerHeight;
-canvas.width = width; canvas.height = height;
-const numFlakes = 120;
-const flakes = [];
-function createFlakes() {
-  for(let i=0;i<numFlakes;i++){ flakes.push({x:Math.random()*width,y:Math.random()*height,radius:Math.random()*3+1,speed:Math.random()*1.5+0.5,drift:Math.random()*1.5-0.75,opacity:Math.random()*0.8+0.2}); }
-}
-function drawFlakes() {
-  ctx.clearRect(0,0,width,height); ctx.fillStyle="white"; ctx.beginPath();
-  for(let flake of flakes){ ctx.globalAlpha=flake.opacity; ctx.moveTo(flake.x,flake.y); ctx.arc(flake.x,flake.y,flake.radius,0,Math.PI*2); }
-  ctx.fill(); ctx.globalAlpha=1; updateFlakes();
-}
-function updateFlakes() { for(let flake of flakes){ flake.y+=flake.speed; flake.x+=flake.drift; if(flake.y>height){flake.y=0;flake.x=Math.random()*width;} if(flake.x>width) flake.x=0; if(flake.x<0) flake.x=width; } }
-function animateSnow(){ drawFlakes(); requestAnimationFrame(animateSnow); }
-createFlakes(); animateSnow();
+  // ===== Glow toggle =====
+  $effectBtn.addEventListener('click', ()=> $character.classList.toggle('glow'));
 
-// RESIZE HANDLER
-window.addEventListener("resize", () => { 
-  width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; 
-  setSizes(); 
-});
+  // ===== Background color cycling =====
+  const hues = ["#a25647", "#4a90e2", "#f5a623", "#7ed321", "#9b59b6"];
+  let hueIndex = 0;
+  $paintBtn.addEventListener('click', ()=>{ hueIndex = (hueIndex + 1) % hues.length; document.documentElement.style.setProperty('--bg-base', hues[hueIndex]); });
 
-setCharacter();
+  // ===== Character navigation =====
+  $prevChar.addEventListener('click', ()=>{ currentCharIndex = (currentCharIndex - 1 + characters.length) % characters.length; setCharacter(); });
+  $nextChar.addEventListener('click', ()=>{ currentCharIndex = (currentCharIndex + 1) % characters.length; setCharacter(); });
+
+  // ===== SNOW EFFECT =====
+  const canvas = document.getElementById('snowCanvas');
+  const ctx = canvas.getContext('2d');
+  let width = window.innerWidth; let height = window.innerHeight;
+  function sizeCanvas(){ width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; }
+  sizeCanvas();
+
+  const numFlakes = 120; const flakes = [];
+  function createFlakes(){ flakes.length = 0; for(let i=0;i<numFlakes;i++){ flakes.push({ x: Math.random()*width, y: Math.random()*height, radius: Math.random()*3+1, speed: Math.random()*1.5+0.5, drift: Math.random()*1.5-0.75, opacity: Math.random()*0.8+0.2 }); } }
+  function drawFlakes(){ ctx.clearRect(0,0,width,height); ctx.beginPath(); for(const f of flakes){ ctx.globalAlpha = f.opacity; ctx.moveTo(f.x,f.y); ctx.arc(f.x,f.y,f.radius,0,Math.PI*2); } ctx.fillStyle = '#fff'; ctx.fill(); ctx.globalAlpha = 1; }
+  function updateFlakes(){ for(const f of flakes){ f.y += f.speed; f.x += f.drift; if(f.y>height){ f.y = 0; f.x = Math.random()*width; } if(f.x>width) f.x = 0; if(f.x<0) f.x = width; } }
+  let rafId;
+  function animate(){ drawFlakes(); updateFlakes(); rafId = requestAnimationFrame(animate); }
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function applyMotionPref(){ if(reduceMotion.matches){ cancelAnimationFrame(rafId); drawFlakes(); } else { cancelAnimationFrame(rafId); animate(); } }
+  reduceMotion.addEventListener?.('change', applyMotionPref);
+  window.addEventListener('resize', ()=>{ sizeCanvas(); createFlakes(); updateCharSize(); });
+
+  // helper to update char size on resize
+  function updateCharSize(){ const ch = characters[currentCharIndex]; const tweak = characterScaleTweaks[ch.name] ?? 0.78; const effective = ch.size * tweak * getViewportScale(); $character.style.setProperty('--char-size', effective); }
+
+  // ===== Init =====
+  createFlakes(); applyMotionPref(); setCharacter();
 </script>
 </body>
 </html>
