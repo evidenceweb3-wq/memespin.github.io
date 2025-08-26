@@ -64,14 +64,45 @@
   .glow{ filter: drop-shadow(0 0 15px #fff) drop-shadow(0 0 30px #fff) }
 
   /* Arrows */
-  .arrowBtn{ position: fixed; top:50%; transform:translateY(-50%); font-size:var(--control-size); padding:8px 12px; background: rgba(0,0,0,0.18); border: none; color: #fff; border-radius: 10px; z-index:12; cursor:pointer }
-  .arrowBtn.left{ left: var(--arrow-offset) }
-  .arrowBtn.right{ right: var(--arrow-offset) }
+.arrowBtn{
+  position: fixed;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:var(--control-size);
+  padding:8px 12px;
+  background: rgba(0,0,0,0.18);
+  border: none;
+  color: #fff;
+  border-radius: 10px;
+  z-index:12;
+  cursor:pointer;
+  box-shadow: none; /* add this to remove shadow */
+}
+.arrowBtn.left{ left: var(--arrow-offset); }
+.arrowBtn.right{ right: var(--arrow-offset); }
 
-  /* Left stacked controls under left arrow */
-  .leftControls{ position: fixed; left: var(--arrow-offset); top: calc(50% + 70px); transform: translateY(0); display:flex; flex-direction:column; gap:10px; z-index:12; }
-  .leftControls button{ background: rgba(255,255,255,0.06); border: none; color: #fff; padding: 8px 12px; border-radius:10px; font-size: clamp(14px, 3.5vw, 20px); cursor: pointer; box-shadow:none }
-  .leftControls button:active{ transform: scale(.98) }
+/* Left stacked controls under left arrow */
+.leftControls{
+  position: fixed;
+  left: var(--arrow-offset);
+  top: calc(50% + 70px);
+  transform: translateY(0);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  z-index:12;
+}
+.leftControls button{
+  background: rgba(255,255,255,0.06);
+  border: none;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius:10px;
+  font-size: clamp(14px, 3.5vw, 20px);
+  cursor: pointer;
+  box-shadow:none; /* already here */
+}
+.leftControls button:active{ transform: scale(.98); }
 
   /* Remove central big control area (kept for accessibility if needed) */
 
@@ -308,6 +339,7 @@
 </script>
 </body>
 </html>
+
 
 
 
