@@ -87,11 +87,11 @@ const ENABLE_TITLE_EFFECTS = true;
 const EFFECTS_POOL = ["effect-rainbow","effect-glitch","effect-flicker","effect-shadowPulse"];
 
 const characters = [
-  { name: "Pepe", frames: ["https://i.postimg.cc/0Nnd1g1C/UnoRe.png","https://i.postimg.cc/KYxrWGwz/DosRe.png","https://i.postimg.cc/654021C9/TresRe.png","https://i.postimg.cc/cLqcQMcf/CuatroRe.png","https://i.postimg.cc/YC1z8GXZ/CincoRe.png"], size: 0.95, spinSpeed: 230, pairId:"GNEqyxGV9u8Hz5G3RX1VxUfWCQFuXEP2ckmbLxe1bmyf", supply: 999940952 },
-  { name: "Finn", frames: ["https://i.postimg.cc/nLyzPYHZ/FinnUNO.png","https://i.postimg.cc/gksx2ZKq/FINNDOS.png","https://i.postimg.cc/7LGh9Qrm/FINNTRES.png","https://i.postimg.cc/hPcJnrVt/FINNCUATRO.png","https://i.postimg.cc/65PyZNDy/FINNCINCO.png","https://i.postimg.cc/13zfn3Cx/FINNSEIS.png","https://i.postimg.cc/yYpSTRS6/FINNSIETE.png","https://i.postimg.cc/prYp8hMv/FINNOCHO.png"], size: 0.8, spinSpeed: 210, pairId:"3kZxw7r663dNYqbw8zGCK7NRrcBMXMcRnv3heak4F7mC", supply: 985377686 },
+  { name: "LAVOPL", frames: ["https://i.postimg.cc/0Nnd1g1C/UnoRe.png","https://i.postimg.cc/KYxrWGwz/DosRe.png","https://i.postimg.cc/654021C9/TresRe.png","https://i.postimg.cc/cLqcQMcf/CuatroRe.png","https://i.postimg.cc/YC1z8GXZ/CincoRe.png"], size: 0.95, spinSpeed: 230, pairId:"GNEqyxGV9u8Hz5G3RX1VxUfWCQFuXEP2ckmbLxe1bmyf", supply: 999940952 },
+  { name: "Finn", frames: ["https://i.postimg.cc/nLyzPYHZ/FinnUNO.png","https://i.postimg.cc/gksx2ZKq/FINNDOS.png","https://i.postimg.cc/7LGh9Qrm/FINNTRES.png","https://i.postimg.cc/hPcJnrVt/FINNCUATRO.png","https://i.postimg.cc/65PyZNDy/FINNCINCO.png","https://i.postimg.cc/13zfn3Cx/FINNSEIS.png","https://i.postimg.cc/yYpSTRS6/FINNSIETE.png","https://i.postimg.cc/prYp8hMv/FINNOCHO.png"], size: 1.25, spinSpeed: 210, pairId:"3kZxw7r663dNYqbw8zGCK7NRrcBMXMcRnv3heak4F7mC", supply: 985377686 },
   { name: "Nippie", frames: ["https://i.postimg.cc/5y4Zq3Pn/NIPPIE1.png","https://i.postimg.cc/sX9kh8JM/NIPPIE2.png","https://i.postimg.cc/nzJ8MZq8/NIPPIE3.png","https://i.postimg.cc/wMwnWmZH/NIPPIE4.png","https://i.postimg.cc/T2Q82zwS/NIPPIE5.png","https://i.postimg.cc/kX502TR5/NIPPIE6.png"], size: 1.1, spinSpeed: 220, pairId:"ENYbntd3KgJJJvMqbe5Awtqu8jkVjnczU8TK46q3odnG", supply: 954759985 },
   { name: "Anon", frames: ["https://i.postimg.cc/yYZPj0zX/Anon1.png","https://i.postimg.cc/MZ451dgp/Anon2.png","https://i.postimg.cc/KjK5dM3b/Anon3.png","https://i.postimg.cc/RhjT9ZwH/Anon3B.png","https://i.postimg.cc/3xQZcW8M/Anon4.png","https://i.postimg.cc/fR7vnZyV/Anon5.png","https://i.postimg.cc/zf0Svjn5/Anon6.png","https://i.postimg.cc/d0qjJXZ4/Anon7.png","https://i.postimg.cc/FHfmBm43/Anon8.png"], size: 1.1, spinSpeed: 220, pairId:"8eQTQLnBmEgeY9avVjrqqgX8ZVr8MRFrXEHpMrx6DGff", supply: 1000000000 },
-  { name: "Bagz", frames: ["https://i.postimg.cc/76DxBpz7/Bagz1.png","https://i.postimg.cc/Qd2N7Bxf/Bagz2.png","https://i.postimg.cc/fRtTk7Z3/Bagz3.png","https://i.postimg.cc/QMc8JXFh/Bagz4.png"], size: 1.2, spinSpeed: 220, pairId:"4MzZA4pqd7HqU9gQKuLSwtC5nUxFpmw5PvRmGoSGMNxF", supply: 1000000000 }
+  { name: "Bagz", frames: ["https://i.postimg.cc/76DxBpz7/Bagz1.png","https://i.postimg.cc/Qd2N7Bxf/Bagz2.png","https://i.postimg.cc/fRtTk7Z3/Bagz3.png","https://i.postimg.cc/QMc8JXFh/Bagz4.png"], size: 1.2, spinSpeed: 220, pairId:"PUT_DEXSCREENER_PAIR_ID_HERE", supply: 1000000000 }
 ];
 
 let currentCharIndex = 0;
@@ -118,9 +118,13 @@ const BASE_TITLE = 60;
 const BASE_PRICE = 28;
 const BASE_BTN = 80;
 
+// Breakpoint-based scale
 function getScale() {
-  let scale = Math.sqrt(window.innerWidth / 1440);
-  return Math.min(Math.max(scale, 0.6), 1); // clamp between 0.6 and 1
+  const w = window.innerWidth;
+  if(w <= 480) return 0.95;   // mobile
+  if(w <= 768) return 1;      // tablet
+  if(w <= 1200) return 0.95;  // small desktop
+  return 1;                    // large desktop
 }
 
 function setSizes() {
@@ -168,7 +172,7 @@ async function updatePrice(char){
   } catch(err){ priceContainer.innerText = "Price unavailable"; console.error(err); }
 }
 
-// Spin button
+// SPIN BUTTON
 function updateFrame() {
   const char = characters[currentCharIndex];
   currentFrame = (currentFrame + 1) % char.frames.length;
@@ -191,7 +195,7 @@ paintBtn.addEventListener("click", () => {
 prevChar.addEventListener("click", () => { currentCharIndex = (currentCharIndex - 1 + characters.length) % characters.length; setCharacter(); });
 nextChar.addEventListener("click", () => { currentCharIndex = (currentCharIndex + 1) % characters.length; setCharacter(); });
 
-// ===== SNOW =====
+// SNOW EFFECT
 const canvas = document.getElementById("snowCanvas");
 const ctx = canvas.getContext("2d");
 let width = window.innerWidth, height = window.innerHeight;
@@ -210,7 +214,7 @@ function updateFlakes() { for(let flake of flakes){ flake.y+=flake.speed; flake.
 function animateSnow(){ drawFlakes(); requestAnimationFrame(animateSnow); }
 createFlakes(); animateSnow();
 
-// ===== RESIZE HANDLER =====
+// RESIZE HANDLER
 window.addEventListener("resize", () => { 
   width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; 
   setSizes(); 
