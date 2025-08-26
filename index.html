@@ -156,11 +156,11 @@ const EFFECTS_POOL = ["effect-rainbow","effect-glitch","effect-flicker","effect-
 
 // ===== CHARACTERS =====
 const characters = [
-  { name: "Bipoe", frames: ["https://i.postimg.cc/0Nnd1g1C/UnoRe.png","https://i.postimg.cc/KYxrWGwz/DosRe.png","https://i.postimg.cc/654021C9/TresRe.png","https://i.postimg.cc/cLqcQMcf/CuatroRe.png","https://i.postimg.cc/YC1z8GXZ/CincoRe.png"], size: 0.95, spinSpeed: 230, pairId:"GNEqyxGV9u8Hz5G3RX1VxUfWCQFuXEP2ckmbLxe1bmyf", supply: 999940952 },
+  { name: "Billie", frames: ["https://i.postimg.cc/0Nnd1g1C/UnoRe.png","https://i.postimg.cc/KYxrWGwz/DosRe.png","https://i.postimg.cc/654021C9/TresRe.png","https://i.postimg.cc/cLqcQMcf/CuatroRe.png","https://i.postimg.cc/YC1z8GXZ/CincoRe.png"], size: 0.95, spinSpeed: 230, pairId:"GNEqyxGV9u8Hz5G3RX1VxUfWCQFuXEP2ckmbLxe1bmyf", supply: 999940952 },
   { name: "Finn", frames: ["https://i.postimg.cc/nLyzPYHZ/FinnUNO.png","https://i.postimg.cc/gksx2ZKq/FINNDOS.png","https://i.postimg.cc/7LGh9Qrm/FINNTRES.png","https://i.postimg.cc/hPcJnrVt/FINNCUATRO.png","https://i.postimg.cc/65PyZNDy/FINNCINCO.png","https://i.postimg.cc/13zfn3Cx/FINNSEIS.png","https://i.postimg.cc/yYpSTRS6/FINNSIETE.png","https://i.postimg.cc/prYp8hMv/FINNOCHO.png"], size: 1.25, spinSpeed: 210, pairId:"3kZxw7r663dNYqbw8zGCK7NRrcBMXMcRnv3heak4F7mC", supply: 985377686 },
   { name: "Nippie", frames: ["https://i.postimg.cc/5y4Zq3Pn/NIPPIE1.png","https://i.postimg.cc/sX9kh8JM/NIPPIE2.png","https://i.postimg.cc/nzJ8MZq8/NIPPIE3.png","https://i.postimg.cc/wMwnWmZH/NIPPIE4.png","https://i.postimg.cc/T2Q82zwS/NIPPIE5.png","https://i.postimg.cc/kX502TR5/NIPPIE6.png"], size: 1.1, spinSpeed: 220, pairId:"ENYbntd3KgJJJvMqbe5Awtqu8jkVjnczU8TK46q3odnG", supply: 954759985 },
   { name: "Anon", frames: ["https://i.postimg.cc/yYZPj0zX/Anon1.png","https://i.postimg.cc/MZ451dgp/Anon2.png","https://i.postimg.cc/KjK5dM3b/Anon3.png","https://i.postimg.cc/RhjT9ZwH/Anon3B.png","https://i.postimg.cc/3xQZcW8M/Anon4.png","https://i.postimg.cc/fR7vnZyV/Anon5.png","https://i.postimg.cc/zf0Svjn5/Anon6.png","https://i.postimg.cc/d0qjJXZ4/Anon7.png","https://i.postimg.cc/FHfmBm43/Anon8.png"], size: 1.1, spinSpeed: 220, pairId:"8eQTQLnBmEgeY9avVjrqqgX8ZVr8MRFrXEHpMrx6DGff", supply: 1000000000 },
-  { name: "Bagz", frames: ["https://yourhost.com/Bagz1.png","https://yourhost.com/Bagz2.png","https://yourhost.com/Bagz3.png","https://yourhost.com/Bagz4.png","https://yourhost.com/Bagz5.png"], size: 1.2, spinSpeed: 220, pairId:"PUT_DEXSCREENER_PAIR_ID_HERE", supply: 1000000000 }
+  { name: "Bagz", frames: ["https://i.postimg.cc/76DxBpz7/Bagz1.png","https://i.postimg.cc/Qd2N7Bxf/Bagz2.png","https://i.postimg.cc/fRtTk7Z3/Bagz3.png","https://i.postimg.cc/QMc8JXFh/Bagz4.png"], size: 1.2, spinSpeed: 220, pairId:"4MzZA4pqd7HqU9gQKuLSwtC5nUxFpmw5PvRmGoSGMNxF", supply: 1000000000 }
 ];
 
 let currentCharIndex = 0;
@@ -179,40 +179,34 @@ const priceContainer = document.getElementById("priceContainer");
 // Preload frames
 characters.forEach(char => char.frames.forEach(src => { const img = new Image(); img.src = src; }));
 
-// ===== SIZE SETTINGS =====
-const SIZE_SETTINGS = {
-  mobile: {
-    char: 320,
-    topLogo: 350,
-    bottomLogo: 160,
-    title: 32,
-    price: 56,
-    btn: 40
-  },
-  desktop: {
-    char: 200,
-    topLogo: 400,
-    bottomLogo: 320,
-    title: 20,
-    price: 58,
-    btn: 80
-  }
-};
+// ===== GLOBAL SCALE SYSTEM =====
+const BASE_WIDTH = 1440; // reference screen width
+const BASE_CHAR = 400;
+const BASE_TOPLOGO = 350;
+const BASE_BOTTOMLOGO = 320;
+const BASE_TITLE = 60;
+const BASE_PRICE = 28;
+const BASE_BTN = 80;
 
-function isMobile() { return window.innerWidth <= 768; }
+function getScale() {
+  return Math.min(window.innerWidth / BASE_WIDTH, 1);
+}
 
 function setSizes() {
-  const s = isMobile() ? SIZE_SETTINGS.mobile : SIZE_SETTINGS.desktop;
+  const scale = getScale();
   const char = characters[currentCharIndex];
-  character.style.width = (s.char * char.size) + "px";
+
+  character.style.width = (BASE_CHAR * char.size * scale) + "px";
   character.style.height = "auto";
-  document.getElementById("topLogo").style.width = s.topLogo + "px";
-  document.getElementById("logo").style.width = s.bottomLogo + "px";
-  charName.style.fontSize = s.title + "px";
-  priceContainer.style.fontSize = s.price + "px";
+
+  document.getElementById("topLogo").style.width = (BASE_TOPLOGO * scale) + "px";
+  document.getElementById("logo").style.width = (BASE_BOTTOMLOGO * scale) + "px";
+
+  charName.style.fontSize = (BASE_TITLE * scale) + "px";
+  priceContainer.style.fontSize = (BASE_PRICE * scale) + "px";
 
   const buttons = document.querySelectorAll("#buttons button, .arrowBtn");
-  buttons.forEach(btn => btn.style.fontSize = s.btn + "px");
+  buttons.forEach(btn => btn.style.fontSize = (BASE_BTN * scale) + "px");
 }
 
 // ===== CHARACTER SET =====
@@ -321,7 +315,6 @@ window.addEventListener("resize", () => {
   canvas.width = width; 
   canvas.height = height; 
   setCharacter(); 
-  setSizes();
 });
 
 createFlakes();
@@ -331,6 +324,3 @@ setCharacter();
 
 </body>
 </html>
-
-
-
