@@ -43,7 +43,7 @@ body {
 /* ===== TITLE AND PRICE FIXED ===== */
 #charName {
   position: fixed;
-  top: 100px; /* under top logo */
+  top: 85px; /* under top logo */
   left: 50%;
   transform: translateX(-50%);
   font-size: 40px;
@@ -56,7 +56,7 @@ body {
 
 #priceContainer {
   position: fixed;
-  top: 155px; /* under title */
+  top: 145px; /* under title */
   left: 50%;
   transform: translateX(-50%);
   font-size: 18px;
@@ -98,7 +98,7 @@ button {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 50px;
+  font-size: 40px;
   outline: none;
   transition: transform 0.2s ease;
 }
@@ -109,7 +109,7 @@ button {
   top: 50%;
   left: 5vw;
   transform: translateY(-50%);
-  font-size: 50px;
+  font-size: 40px;
   z-index: 10;
 }
 
@@ -118,7 +118,7 @@ button {
   top: 50%;
   right: 5vw;
   transform: translateY(-50%);
-  font-size: 50px;
+  font-size: 40px;
   z-index: 10;
 }
 
@@ -163,7 +163,19 @@ const EFFECTS_POOL = ["effect-rainbow","effect-glitch","effect-flicker","effect-
 
 const characters = [
   { name: "Billie", frames: ["https://i.postimg.cc/0Nnd1g1C/UnoRe.png","https://i.postimg.cc/KYxrWGwz/DosRe.png","https://i.postimg.cc/654021C9/TresRe.png","https://i.postimg.cc/cLqcQMcf/CuatroRe.png","https://i.postimg.cc/YC1z8GXZ/CincoRe.png"], size: 0.95, spinSpeed: 230, pairId:"GNEqyxGV9u8Hz5G3RX1VxUfWCQFuXEP2ckmbLxe1bmyf", supply: 999940952 },
-  { name: "Finn", frames: ["https://i.postimg.cc/nLyzPYHZ/FinnUNO.png","https://i.postimg.cc/gksx2ZKq/FINNDOS.png","https://i.postimg.cc/7LGh9Qrm/FINNTRES.png","https://i.postimg.cc/hPcJnrVt/FINNCUATRO.png","https://i.postimg.cc/65PyZNDy/FINNCINCO.png","https://i.postimg.cc/13zfn3Cx/FINNSEIS.png","https://i.postimg.cc/yYpSTRS6/FINNSIETE.png","https://i.postimg.cc/prYp8hMv/FINNOCHO.png"], size: 1.25, spinSpeed: 210, pairId:"3kZxw7r663dNYqbw8zGCK7NRrcBMXMcRnv3heak4F7mC", supply: 985377686 },
+  {name: "Bagz",
+  frames: [
+    "https://i.postimg.cc/76DxBpz7/Bagz1.png",
+    "https://i.postimg.cc/Qd2N7Bxf/Bagz2.png",
+    "https://i.postimg.cc/fRtTk7Z3/Bagz3.png",
+    "https://i.postimg.cc/QMc8JXFh/Bagz4.png",
+  ],
+  size: 1.0,                  // adjust size as needed
+  spinSpeed: 220,             // adjust rotation speed
+  pairId: "4MzZA4pqd7HqU9gQKuLSwtC5nUxFpmw5PvRmGoSGMNxF", // replace with real Dexscreener pair ID
+  supply: 1000000000          // replace with actual supply
+},
+  { name: "Finn", frames: ["https://i.postimg.cc/nLyzPYHZ/FinnUNO.png","https://i.postimg.cc/gksx2ZKq/FINNDOS.png","https://i.postimg.cc/7LGh9Qrm/FINNTRES.png","https://i.postimg.cc/hPcJnrVt/FINNCUATRO.png","https://i.postimg.cc/65PyZNDy/FINNCINCO.png","https://i.postimg.cc/13zfn3Cx/FINNSEIS.png","https://i.postimg.cc/yYpSTRS6/FINNSIETE.png","https://i.postimg.cc/prYp8hMv/FINNOCHO.png"], size: 1.10, spinSpeed: 210, pairId:"3kZxw7r663dNYqbw8zGCK7NRrcBMXMcRnv3heak4F7mC", supply: 985377686 },
   { name: "Nippie", frames: ["https://i.postimg.cc/5y4Zq3Pn/NIPPIE1.png","https://i.postimg.cc/sX9kh8JM/NIPPIE2.png","https://i.postimg.cc/nzJ8MZq8/NIPPIE3.png","https://i.postimg.cc/wMwnWmZH/NIPPIE4.png","https://i.postimg.cc/T2Q82zwS/NIPPIE5.png","https://i.postimg.cc/kX502TR5/NIPPIE6.png"], size: 1.1, spinSpeed: 220, pairId:"ENYbntd3KgJJJvMqbe5Awtqu8jkVjnczU8TK46q3odnG", supply: 954759985 },
   { name: "Anon", frames: ["https://i.postimg.cc/yYZPj0zX/Anon1.png","https://i.postimg.cc/MZ451dgp/Anon2.png","https://i.postimg.cc/KjK5dM3b/Anon3.png","https://i.postimg.cc/RhjT9ZwH/Anon3B.png","https://i.postimg.cc/3xQZcW8M/Anon4.png","https://i.postimg.cc/fR7vnZyV/Anon5.png","https://i.postimg.cc/zf0Svjn5/Anon6.png","https://i.postimg.cc/d0qjJXZ4/Anon7.png","https://i.postimg.cc/FHfmBm43/Anon8.png"], size: 1.1, spinSpeed: 220, pairId:"8eQTQLnBmEgeY9avVjrqqgX8ZVr8MRFrXEHpMrx6DGff", supply: 1000000000 }
 ];
