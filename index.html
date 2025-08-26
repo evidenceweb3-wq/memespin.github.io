@@ -28,7 +28,6 @@ body {
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
-  width: clamp(150px, 20vw, 350px);
 }
 
 #logo {
@@ -37,7 +36,6 @@ body {
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
-  width: clamp(120px, 18vw, 320px);
 }
 
 /* ===== TITLE AND PRICE ===== */
@@ -51,7 +49,6 @@ body {
   text-shadow: 2px 2px 0.5vw rgba(0,0,0,0.7);
   z-index: 10;
   text-align: center;
-  font-size: clamp(24px, 6vw, 60px);
 }
 
 #priceContainer {
@@ -63,7 +60,6 @@ body {
   text-shadow: 1px 1px 0.3vw rgba(0,0,0,0.7);
   z-index: 10;
   text-align: center;
-  font-size: clamp(14px, 3.5vw, 28px);
 }
 
 /* ===== CHARACTER ===== */
@@ -91,14 +87,12 @@ body {
   gap: 4vw;
   justify-content: center;
   z-index: 10;
-  font-size: clamp(32px, 10vw, 80px);
 }
 
 button {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: inherit;
   outline: none;
   transition: transform 0.2s ease;
   touch-action: manipulation;
@@ -111,7 +105,6 @@ button {
   left: 5vw;
   transform: translateY(-50%);
   z-index: 10;
-  font-size: clamp(32px, 10vw, 80px);
 }
 
 .arrowBtn.right {
@@ -120,7 +113,6 @@ button {
   right: 5vw;
   transform: translateY(-50%);
   z-index: 10;
-  font-size: clamp(32px, 10vw, 80px);
 }
 
 /* ===== SNOW CANVAS ===== */
@@ -164,7 +156,7 @@ const EFFECTS_POOL = ["effect-rainbow","effect-glitch","effect-flicker","effect-
 
 // ===== CHARACTERS =====
 const characters = [
-  { name: "Billie", frames: ["https://i.postimg.cc/0Nnd1g1C/UnoRe.png","https://i.postimg.cc/KYxrWGwz/DosRe.png","https://i.postimg.cc/654021C9/TresRe.png","https://i.postimg.cc/cLqcQMcf/CuatroRe.png","https://i.postimg.cc/YC1z8GXZ/CincoRe.png"], size: 0.95, spinSpeed: 230, pairId:"GNEqyxGV9u8Hz5G3RX1VxUfWCQFuXEP2ckmbLxe1bmyf", supply: 999940952 },
+  { name: "Billoe", frames: ["https://i.postimg.cc/0Nnd1g1C/UnoRe.png","https://i.postimg.cc/KYxrWGwz/DosRe.png","https://i.postimg.cc/654021C9/TresRe.png","https://i.postimg.cc/cLqcQMcf/CuatroRe.png","https://i.postimg.cc/YC1z8GXZ/CincoRe.png"], size: 0.95, spinSpeed: 230, pairId:"GNEqyxGV9u8Hz5G3RX1VxUfWCQFuXEP2ckmbLxe1bmyf", supply: 999940952 },
   { name: "Finn", frames: ["https://i.postimg.cc/nLyzPYHZ/FinnUNO.png","https://i.postimg.cc/gksx2ZKq/FINNDOS.png","https://i.postimg.cc/7LGh9Qrm/FINNTRES.png","https://i.postimg.cc/hPcJnrVt/FINNCUATRO.png","https://i.postimg.cc/65PyZNDy/FINNCINCO.png","https://i.postimg.cc/13zfn3Cx/FINNSEIS.png","https://i.postimg.cc/yYpSTRS6/FINNSIETE.png","https://i.postimg.cc/prYp8hMv/FINNOCHO.png"], size: 1.25, spinSpeed: 210, pairId:"3kZxw7r663dNYqbw8zGCK7NRrcBMXMcRnv3heak4F7mC", supply: 985377686 },
   { name: "Nippie", frames: ["https://i.postimg.cc/5y4Zq3Pn/NIPPIE1.png","https://i.postimg.cc/sX9kh8JM/NIPPIE2.png","https://i.postimg.cc/nzJ8MZq8/NIPPIE3.png","https://i.postimg.cc/wMwnWmZH/NIPPIE4.png","https://i.postimg.cc/T2Q82zwS/NIPPIE5.png","https://i.postimg.cc/kX502TR5/NIPPIE6.png"], size: 1.1, spinSpeed: 220, pairId:"ENYbntd3KgJJJvMqbe5Awtqu8jkVjnczU8TK46q3odnG", supply: 954759985 },
   { name: "Anon", frames: ["https://i.postimg.cc/yYZPj0zX/Anon1.png","https://i.postimg.cc/MZ451dgp/Anon2.png","https://i.postimg.cc/KjK5dM3b/Anon3.png","https://i.postimg.cc/RhjT9ZwH/Anon3B.png","https://i.postimg.cc/3xQZcW8M/Anon4.png","https://i.postimg.cc/fR7vnZyV/Anon5.png","https://i.postimg.cc/zf0Svjn5/Anon6.png","https://i.postimg.cc/d0qjJXZ4/Anon7.png","https://i.postimg.cc/FHfmBm43/Anon8.png"], size: 1.1, spinSpeed: 220, pairId:"8eQTQLnBmEgeY9avVjrqqgX8ZVr8MRFrXEHpMrx6DGff", supply: 1000000000 },
@@ -187,19 +179,47 @@ const priceContainer = document.getElementById("priceContainer");
 // Preload frames
 characters.forEach(char => char.frames.forEach(src => { const img = new Image(); img.src = src; }));
 
-// ===== MIN/MAX SIZES =====
-const MIN_CHAR_SIZE = 120;  // px
-const MAX_CHAR_SIZE = 400;  // px
+// ===== SIZE SETTINGS =====
+const SIZE_SETTINGS = {
+  mobile: {
+    char: 220,
+    topLogo: 180,
+    bottomLogo: 160,
+    title: 32,
+    price: 16,
+    btn: 40
+  },
+  desktop: {
+    char: 400,
+    topLogo: 350,
+    bottomLogo: 320,
+    title: 60,
+    price: 28,
+    btn: 80
+  }
+};
 
+function isMobile() { return window.innerWidth <= 768; }
+
+function setSizes() {
+  const s = isMobile() ? SIZE_SETTINGS.mobile : SIZE_SETTINGS.desktop;
+  const char = characters[currentCharIndex];
+  character.style.width = (s.char * char.size) + "px";
+  character.style.height = "auto";
+  document.getElementById("topLogo").style.width = s.topLogo + "px";
+  document.getElementById("logo").style.width = s.bottomLogo + "px";
+  charName.style.fontSize = s.title + "px";
+  priceContainer.style.fontSize = s.price + "px";
+
+  const buttons = document.querySelectorAll("#buttons button, .arrowBtn");
+  buttons.forEach(btn => btn.style.fontSize = s.btn + "px");
+}
+
+// ===== CHARACTER SET =====
 function setCharacter() {
   const char = characters[currentCharIndex];
   currentFrame = 0;
   character.src = char.frames[currentFrame];
-
-  const baseSize = Math.min(window.innerWidth, window.innerHeight);
-  const charWidth = Math.min(Math.max(char.size * 0.35 * baseSize, MIN_CHAR_SIZE), MAX_CHAR_SIZE);
-  character.style.width = charWidth + "px";
-  character.style.height = "auto";
 
   let title = FORCE_UPPERCASE ? char.name.toUpperCase() : char.name;
   charName.textContent = title;
@@ -211,8 +231,10 @@ function setCharacter() {
   }
 
   updatePrice(char);
+  setSizes();
 }
 
+// ===== UPDATE PRICE =====
 async function updatePrice(char){
   if(!char.pairId) { 
     priceContainer.innerText = "Price unavailable"; 
@@ -223,7 +245,6 @@ async function updatePrice(char){
     const data = await res.json();
     const price = data.pair?.priceUsd ? parseFloat(data.pair.priceUsd).toFixed(6) : "0.000000";
     const mcap = char.supply ? (char.supply * parseFloat(price)).toLocaleString(undefined, {maximumFractionDigits:0}) : "0";
-
     priceContainer.innerHTML = `Price: $${price} | MCAP: $${mcap}`;
   } catch(err){
     priceContainer.innerText = "Price unavailable";
@@ -231,7 +252,7 @@ async function updatePrice(char){
   }
 }
 
-// Spin button
+// ===== SPIN & EFFECTS =====
 function updateFrame() {
   const char = characters[currentCharIndex];
   currentFrame = (currentFrame + 1) % char.frames.length;
@@ -243,11 +264,9 @@ turnBtn.addEventListener("mouseup", () => clearInterval(intervalId));
 turnBtn.addEventListener("mouseleave", () => clearInterval(intervalId));
 turnBtn.addEventListener("touchstart", (e) => { e.preventDefault(); const char = characters[currentCharIndex]; intervalId = setInterval(updateFrame, char.spinSpeed); });
 turnBtn.addEventListener("touchend", () => clearInterval(intervalId));
-
-// Glow toggle
 effectBtn.addEventListener("click", () => character.classList.toggle("glow"));
 
-// Background color cycling
+// Background colors
 const hues = ["#a25647", "#4a90e2", "#f5a623", "#7ed321", "#9b59b6"];
 let hueIndex = 0;
 paintBtn.addEventListener("click", () => { hueIndex = (hueIndex + 1) % hues.length; document.body.style.background = hues[hueIndex]; });
@@ -266,7 +285,6 @@ canvas.height = height;
 
 const numFlakes = 120;
 const flakes = [];
-
 function createFlakes() {
   for(let i=0;i<numFlakes;i++){
     flakes.push({ x: Math.random()*width, y: Math.random()*height, radius: Math.random()*3+1, speed: Math.random()*1.5+0.5, drift: Math.random()*1.5-0.75, opacity: Math.random()*0.8+0.2 });
@@ -296,12 +314,14 @@ function updateFlakes() {
 }
 function animateSnow(){ drawFlakes(); requestAnimationFrame(animateSnow); }
 
+// ===== RESIZE HANDLER =====
 window.addEventListener("resize", () => { 
   width = window.innerWidth; 
   height = window.innerHeight; 
   canvas.width = width; 
   canvas.height = height; 
-  setCharacter();
+  setCharacter(); 
+  setSizes();
 });
 
 createFlakes();
