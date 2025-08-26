@@ -45,7 +45,19 @@
   #logo{ width: var(--logo-bottom-w); position: fixed; bottom: calc(max(18px, env(safe-area-inset-bottom)) + 6px); left:50%; transform:translateX(-50%); z-index:12; pointer-events:none }
 
   #charName{ position: fixed; top: calc(max(8px, env(safe-area-inset-top)) + 70px); left:50%; transform:translateX(-50%); font-size:var(--title-size); font-weight:800; text-align:center; z-index:12; text-shadow: 2px 2px 8px rgba(0,0,0,0.6); }
-  #priceContainer{ position: fixed; top: calc(max(8px, env(safe-area-inset-top)) + 70px + 42px); left:50%; transform:translateX(-50%); font-size:var(--price-size); z-index:12; text-shadow: 1px 1px 4px rgba(0,0,0,0.6); }
+  #priceContainer {
+  position: fixed;
+  top: calc(max(8px, env(safe-area-inset-top)) + 70px + 42px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: var(--price-size);
+  z-index: 12;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
   /* Character centered area */
   #characterWrap{ position: fixed; inset: var(--safe-top) 0 var(--safe-bottom) 0; display:grid; place-items:center; z-index:6; pointer-events:none }
@@ -297,6 +309,7 @@
 </script>
 </body>
 </html>
+
 
 
 
