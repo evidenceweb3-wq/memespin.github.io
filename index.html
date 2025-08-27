@@ -63,46 +63,57 @@
   #character{ max-width: calc(var(--char-base)); max-height:100%; width: calc(var(--char-base) * var(--char-size, 1)); height:auto; object-fit:contain; transition: transform .22s ease, filter .22s ease; pointer-events:auto }
   .glow{ filter: drop-shadow(0 0 15px #fff) drop-shadow(0 0 30px #fff) }
 
-  /* Arrows */
-.arrowBtn,
-.leftControls button {
-  background: none;       /* remove background */
-  border: none;           /* remove border */
-  box-shadow: none;       /* remove shadow */
-  padding: 0;             /* remove extra padding */
-  font-size: var(--control-size); /* uniform emoji size */
-  cursor: pointer;
+  /* Arrow Buttons */
+.arrowBtn {
+  position: fixed;
+  font-size: var(--control-size);  /* size of arrows */
+  padding: 0;                     /* remove extra padding */
+  background: none;
+  border: none;
   color: #fff;
-  position: fixed;        /* keep positioning */
+  border-radius: 10px;
   z-index: 12;
+  cursor: pointer;
+  line-height: 1;                 /* centers emoji */
 }
 
-.arrowBtn.left { left: var(--arrow-offset); top: 50%; transform: translateY(-50%); }
-.arrowBtn.right { right: var(--arrow-offset); top: 50%; transform: translateY(-50%); }
+.arrowBtn.left {
+  top: 50%;
+  left: var(--arrow-offset);
+  transform: translateY(-50%);
+}
 
+.arrowBtn.right {
+  top: 50%;
+  right: var(--arrow-offset);
+  transform: translateY(-50%);
+}
+
+/* Left stacked emoji function buttons (lower than left arrow) */
 .leftControls {
   position: fixed;
   left: var(--arrow-offset);
-  top: calc(50% + 70px);
+  top: calc(50% + var(--control-size) / 2 + var(--control-size) + 10px); /* one emoji below arrow + extra 10px */
   display: flex;
-  flex-direction: column;  /* vertical stack */
-  gap: 12px;               /* spacing between buttons */
+  flex-direction: column;
+  gap: 15px; /* space between each button */
   z-index: 12;
 }
 
 .leftControls button {
-  background: none;       /* just emoji */
+  background: none;
   border: none;
-  box-shadow: none;
-  padding: 0;
-  font-size: var(--control-size); /* size of emoji */
-  cursor: pointer;
   color: #fff;
-  width: auto;            /* allow emoji to take natural width */
-  height: auto;           /* allow natural height */
-  display: inline-flex;   /* keep buttons visible */
-  justify-content: center;
-  align-items: center;
+  padding: 0;
+  border-radius: 0;
+  font-size: var(--control-size); /* same size as arrow */
+  cursor: pointer;
+  line-height: 1;                 /* centers emoji */
+  box-shadow: none;
+}
+
+.leftControls button:active {
+  transform: scale(0.95);
 }
   /* Remove central big control area (kept for accessibility if needed) */
 
@@ -159,7 +170,7 @@
 
   // ===== Characters (KEEP SENSITIVE DATA) =====
   const characters = [
-    { name: "poper", frames: [
+    { name: "Billie", frames: [
       "https://i.postimg.cc/0Nnd1g1C/UnoRe.png",
       "https://i.postimg.cc/KYxrWGwz/DosRe.png",
       "https://i.postimg.cc/654021C9/TresRe.png",
@@ -339,6 +350,7 @@
 </script>
 </body>
 </html>
+
 
 
 
