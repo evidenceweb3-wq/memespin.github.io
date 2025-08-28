@@ -58,6 +58,17 @@
     text-overflow: ellipsis;
     max-width: 78vw;              /* avoid excessively long text overflowing viewport */
   }
+  
+  /* NEW: 24h change under price */
+  #change24h {
+  position: fixed;
+  top: calc(max(8px, env(safe-area-inset-top)) + 70px + 62px + 28px); /* below priceContainer */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8em;
+  z-index: 12;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+}
 
   /* Character centered area */
   #characterWrap{ position: fixed; inset: var(--safe-top) 0 var(--safe-bottom) 0; display:grid; place-items:center; z-index:6; pointer-events:none }
@@ -176,6 +187,7 @@
   <!-- Header: Title & Price -->
   <div id="charName" aria-live="polite"></div>
   <div id="priceContainer" aria-live="polite">Loading price…</div>
+  <div id="change24h" aria-live="polite"></div>
 
   <!-- Character (auto-centered between safe areas) -->
   <div id="characterWrap">
@@ -375,21 +387,54 @@
     updatePrice(ch);
   }
 
-  async function updatePrice(ch){
-    if(!ch.pairId){ $priceContainer.textContent = "Price unavailable"; return; }
-    try{
-      const res = await fetch(`https://api.dexscreener.com/latest/dex/pairs/solana/${ch.pairId}`);
-      const data = await res.json();
-      const price = data.pair?.priceUsd ? parseFloat(data.pair.priceUsd) : 0;
-      const priceStr = price.toFixed(6);
-      const mcap = ch.supply ? (ch.supply * price) : 0;
-      const mcapStr = mcap.toLocaleString(undefined,{ maximumFractionDigits: 0 });
-      $priceContainer.textContent = `Price: $${priceStr} | MCAP: $${mcapStr}`;
-    } catch(err){
-      console.error(err);
-      $priceContainer.textContent = "Price unavailable";
-    }
+  async function updatePrice(ch) {
+  const changeEl = document.getElementById('change24h');
+
+  if (!ch.pairId) {
+    $priceContainer.textContent = "Price unavailable";
+    changeEl.textContent = '';
+    return;
   }
+
+  try {
+    const res = await fetch(`https://api.dexscreener.com/latest/dex/pairs/solana/${ch.pairId}`);
+    const data = await res.json();
+
+    const price = data.pair?.priceUsd ? parseFloat(data.pair.priceUsd) : 0;
+    const priceStr = price.toFixed(6);
+
+    const mcap = ch.supply ? (ch.supply * price) : 0;
+    const mcapStr = mcap.toLocaleString(undefined, { maximumFractionDigits: 0 });
+
+    // 24h price change
+    const changeEl = document.getElementById('change24h');
+
+const change = data.pair?.priceChange?.h24 ?? 0;
+const formattedChange = `${Math.abs(change).toFixed(2)}%`;
+
+if (change > 0) {
+  changeEl.textContent = `🤑 +${formattedChange}`;
+  changeEl.style.color = '#00ff00'; // bright green
+  changeEl.style.fontSize = '1.3em'; // slightly bigger emoji
+} else if (change < 0) {
+  changeEl.textContent = `😈 -${formattedChange}`;
+  changeEl.style.color = '#ff3333'; // bright red
+  changeEl.style.fontSize = '1.3em';
+} else {
+  changeEl.textContent = `0.00%`;
+  changeEl.style.color = '#ffffff';
+  changeEl.style.fontSize = '1.2em';
+}
+
+
+    $priceContainer.textContent = `Price: $${priceStr} | MCAP: $${mcapStr}`;
+  } catch (err) {
+    console.error(err);
+    $priceContainer.textContent = "Price unavailable";
+    changeEl.textContent = '';
+  }
+}
+
 
   // ===== Spin logic =====
   function nextFrame(){
@@ -615,8 +660,3 @@ if(effectMode === 4) initMatrix();
 </script>
 </body>
 </html>
-
-
-
-
-
