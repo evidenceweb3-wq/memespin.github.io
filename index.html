@@ -12,7 +12,7 @@
     --bg-grad-3: rgba(0,0,0,0.00);
     --bg-grad-4: rgba(0,0,0,0.40);
 
-    --title-size: clamp(44px, 4.5vw, 44px);
+    --title-size: clamp(22px, 4.5vw, 44px);
     --price-size: clamp(18px, 2.7vw, 48px);
     --control-size: clamp(28px, 6vw, 50px);
     --arrow-offset: clamp(14px, 5vw, 64px);
@@ -46,79 +46,106 @@
 
   #charName{ position: fixed; top: calc(max(8px, env(safe-area-inset-top)) + 70px); left:50%; transform:translateX(-50%); font-size:var(--title-size); font-weight:800; text-align:center; z-index:12; text-shadow: 2px 2px 8px rgba(0,0,0,0.6); }
   #priceContainer {
-  position: fixed;
-  top: calc(max(8px, env(safe-area-inset-top)) + 70px + 62px);
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: var(--price-size);
-  z-index: 12;
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-  
+    position: fixed;
+    top: calc(max(8px, env(safe-area-inset-top)) + 70px + 62px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: var(--price-size);
+    z-index: 12;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+    white-space: nowrap;          /* keep price and mcap on a single line */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 78vw;              /* avoid excessively long text overflowing viewport */
+  }
+
   /* Character centered area */
   #characterWrap{ position: fixed; inset: var(--safe-top) 0 var(--safe-bottom) 0; display:grid; place-items:center; z-index:6; pointer-events:none }
   #character{ max-width: calc(var(--char-base)); max-height:100%; width: calc(var(--char-base) * var(--char-size, 1)); height:auto; object-fit:contain; transition: transform .22s ease, filter .22s ease; pointer-events:auto }
   .glow{ filter: drop-shadow(0 0 15px #fff) drop-shadow(0 0 30px #fff) }
 
-  /* Arrow Buttons */
-.arrowBtn {
+  /* Arrow Buttons (emoji-only) */
+  .arrowBtn {
+    position: fixed;
+    font-size: var(--control-size);  /* size of arrows */
+    padding: 0;                      /* no extra padding so emoji is natural size */
+    background: none;
+    border: none;
+    color: #fff;
+    z-index: 12;
+    cursor: pointer;
+    line-height: 1;                 /* centers emoji */
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .arrowBtn.left {
+    top: 50%;
+    left: var(--arrow-offset);
+    transform: translateY(-52%);
+  }
+
+  .arrowBtn.right {
+    top: 50%;
+    right: var(--arrow-offset);
+    transform: translateY(-52%);
+  }
+
+  /* Left stacked emoji function buttons (aligned under left arrow) */
+  .leftControls {
+    position: fixed;
+    left: var(--arrow-offset);
+    top: calc(50% + var(--control-size) + 12px); /* slightly below arrow */
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* space between each button */
+    z-index: 12;
+  }
+  .leftControls button {
+    background: none;
+    border: none;
+    color: #fff;
+    padding: 0;
+    border-radius: 0;
+    font-size: var(--control-size); /* same size as arrow */
+    cursor: pointer;
+    line-height: 1;                 /* centers emoji */
+    box-shadow: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .leftControls button:active {
+    transform: scale(0.95);
+  }
+
+  /* Particle canvas (replaces old snowCanvas) */
+  #particleCanvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Top-left effect toggle button */
+  #effectToggle {
   position: fixed;
-  font-size: var(--control-size);  /* size of arrows */
-  padding: 0;                     /* remove extra padding */
-  background: none;
-  border: none;
-  color: #fff;
-  border-radius: 10px;
+  left: var(--arrow-offset);
+  top: 30%;
+  transform: translateY(-50%);
   z-index: 12;
-  cursor: pointer;
-  line-height: 1;                 /* centers emoji */
-}
-
-.arrowBtn.left {
-  top: 50%;
-  left: var(--arrow-offset);
-  transform: translateY(-52%);
-}
-
-.arrowBtn.right {
-  top: 50%;
-  right: var(--arrow-offset);
-  transform: translateY(-52%);
-}
-
-/* Left stacked emoji function buttons (lower than left arrow) */
-.leftControls {
-  position: fixed;
-  left: var(--arrow-offset);
-  top: calc(50% + var(--control-size) / 2 + var(--control-size) + 10px); /* one emoji below arrow + extra 10px */
   display: flex;
   flex-direction: column;
-  gap: 15px; /* space between each button */
-  z-index: 12;
-}
-
-.leftControls button {
+  align-items: center; /* centers the emojis horizontally */
+  font-size: var(--control-size); /* same size as left buttons */
   background: none;
   border: none;
   color: #fff;
-  padding: 0;
-  border-radius: 0;
-  font-size: var(--control-size); /* same size as arrow */
+  padding: 0.08;
   cursor: pointer;
-  line-height: 1;                 /* centers emoji */
-  box-shadow: none;
+  line-height: 1; 
+  -webkit-tap-highlight-color: transparent;
 }
 
-.leftControls button:active {
-  transform: scale(0.95);
-}
-  /* Remove central big control area (kept for accessibility if needed) */
-
-  /* Snow canvas */
-  .snowCanvas{ position: fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:0 }
 
   /* Title effects */
   .effect-rainbow{ animation: hue 5s linear infinite }
@@ -135,8 +162,12 @@
 </style>
 </head>
 <body>
-  <!-- Snow layer -->
-  <canvas class="snowCanvas" id="snowCanvas" aria-hidden="true"></canvas>
+
+  <!-- Particle layer (snow / blood / candles) -->
+  <canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+  <!-- Toggle for particle effects (cycles) -->
+  <button id="effectToggle" aria-pressed="false" title="Cycle particle effects">❄️</button>
 
   <!-- Fixed Logos -->
   <img id="topLogo" src="https://i.postimg.cc/J4jjNvTq/memspin1.png" alt="Top Logo" />
@@ -151,14 +182,14 @@
     <img id="character" src="" alt="Character" />
   </div>
 
-  <!-- Left stacked controls under left arrow -->
+  <!-- Left stacked controls under left arrow (emoji-only) -->
   <div class="leftControls" role="group" aria-label="Character controls">
     <button id="turnBtn" title="Spin">🔄</button>
     <button id="effectBtn" title="Glow on/off">✨</button>
     <button id="paintBtn" title="Change background">🎨</button>
   </div>
 
-  <!-- Arrow Navigation -->
+  <!-- Arrow Navigation (emoji-only) -->
   <button class="arrowBtn left"  id="prevChar" title="Previous">⬅️</button>
   <button class="arrowBtn right" id="nextChar" title="Next">➡️</button>
 
@@ -218,58 +249,57 @@
     ], size: 0.80, spinSpeed: 220, pairId:"8eQTQLnBmEgeY9avVjrqqgX8ZVr8MRFrXEHpMrx6DGff", supply: 1000000000 },
 
     { name: "NYAN", frames: [
-    "https://i.postimg.cc/mDjqJvGF/frame-00-delay-0-07s.gif",
-    "https://i.postimg.cc/HsRNq0F3/frame-01-delay-0-07s.gif",
-    "https://i.postimg.cc/9MCKxWsh/frame-02-delay-0-07s.gif",
-    "https://i.postimg.cc/QxHPYYYH/frame-03-delay-0-07s.gif",
-    "https://i.postimg.cc/Z5NQ4BSm/frame-04-delay-0-07s.gif",
-    "https://i.postimg.cc/8CV05pp6/frame-05-delay-0-07s.gif",
-    "https://i.postimg.cc/YSfyL50y/frame-06-delay-0-07s.gif",
-    "https://i.postimg.cc/k4JYQTtM/frame-07-delay-0-07s.gif",
-    "https://i.postimg.cc/0QVWc7pY/frame-08-delay-0-07s.gif",
-    "https://i.postimg.cc/qqgmYgL9/frame-09-delay-0-07s.gif",
-    "https://i.postimg.cc/MH4s8x3X/frame-10-delay-0-07s.gif",
-    "https://i.postimg.cc/3rbfGCr7/frame-11-delay-0-07s.gif",
-  ],
-  size: 1.0,           // tweak if needed
-  spinSpeed: 100,       // adjust for smooth spin
-  pairId: "3BfzLnxHVaYJNrAP6SxfT7Z8nFe5ybKL6JMTuCrNR8zZ", // add the token pair ID for price tracking
-  supply: 999974598    // token supply
-},
-    { 
-  name: "Orynth", frames: [
-    "https://i.postimg.cc/q7Qn6rVR/Orynth1.png",
-    "https://i.postimg.cc/zG635H8q/Orynth2.png",
-    "https://i.postimg.cc/d0C30QVr/Orynth3.png",
-    "https://i.postimg.cc/W1htQwR9/Orynth4.png",
-    "https://i.postimg.cc/wTW7fbry/Orynth5.png",
-    "https://i.postimg.cc/mDGD1xPq/Orynth6.png",
-    "https://i.postimg.cc/nzYLvd7L/Orynth7.png",
-    "https://i.postimg.cc/GtLmzkJx/Orynth8.png",
-  ], 
-  size: 1.0,          // adjust visually
-  spinSpeed: 120,     // milliseconds per frame
-  pairId: "C53QBLiDTYhQEgsHKQDS4kEAwEKty1nDkYxF6w67dvBh", // for price tracking
-  supply: 999987590      // total supply
-},
-    
-{ 
-  name: "PEPE", frames: [
-    "https://i.postimg.cc/3wFxwVJ9/Pepe1.png",
-    "https://i.postimg.cc/cHD1R33n/Pepe2.png",
-    "https://i.postimg.cc/qqzJj7cZ/Pepe3.png",
-    "https://i.postimg.cc/xCjTN5XQ/Pepe4.png",
-    "https://i.postimg.cc/3NVK6Hnr/Pepe5.png",
-    "https://i.postimg.cc/05B2rpPg/Pepe6.png",
-  ], 
-  size: 1.0,          // adjust visually
-  spinSpeed: 200,     // milliseconds per frame
-  pairId: "8Lvqv2jgNvcx1NDtMHd5Ahx8ZUjETfLwygq9MtDfPHxe", // for price tracking
-  supply: 999826244      // total supply
-},
+      "https://i.postimg.cc/mDjqJvGF/frame-00-delay-0-07s.gif",
+      "https://i.postimg.cc/HsRNq0F3/frame-01-delay-0-07s.gif",
+      "https://i.postimg.cc/9MCKxWsh/frame-02-delay-0-07s.gif",
+      "https://i.postimg.cc/QxHPYYYH/frame-03-delay-0-07s.gif",
+      "https://i.postimg.cc/Z5NQ4BSm/frame-04-delay-0-07s.gif",
+      "https://i.postimg.cc/8CV05pp6/frame-05-delay-0-07s.gif",
+      "https://i.postimg.cc/YSfyL50y/frame-06-delay-0-07s.gif",
+      "https://i.postimg.cc/k4JYQTtM/frame-07-delay-0-07s.gif",
+      "https://i.postimg.cc/0QVWc7pY/frame-08-delay-0-07s.gif",
+      "https://i.postimg.cc/qqgmYgL9/frame-09-delay-0-07s.gif",
+      "https://i.postimg.cc/MH4s8x3X/frame-10-delay-0-07s.gif",
+      "https://i.postimg.cc/3rbfGCr7/frame-11-delay-0-07s.gif"
+    ],
+    size: 1.0,
+    spinSpeed: 100,
+    pairId: "3BfzLnxHVaYJNrAP6SxfT7Z8nFe5ybKL6JMTuCrNR8zZ",
+    supply: 999974598
+    },
+
+    { name: "Orynth", frames: [
+      "https://i.postimg.cc/q7Qn6rVR/Orynth1.png",
+      "https://i.postimg.cc/G25yzjpn/Orynth2.png",
+      "https://i.postimg.cc/Dz7LzZNH/Orynth3.png",
+      "https://i.postimg.cc/500zwrbm/Orynth4.png",
+      "https://i.postimg.cc/vTx6K61g/Orynth5.png",
+      "https://i.postimg.cc/dQhHFHrd/Orynth6.png",
+      "https://i.postimg.cc/G90snhYM/Orynth7.png",
+      "https://i.postimg.cc/J7STzN5F/Orynth8.png"
+    ],
+    size: 1.0,
+    spinSpeed: 120,
+    pairId: "C53QBLiDTYhQEgsHKQDS4kEAwEKty1nDkYxF6w67dvBh",
+    supply: 999987590
+    },
+
+    { name: "PEPE", frames: [
+      "https://i.postimg.cc/3wFxwVJ9/Pepe1.png",
+      "https://i.postimg.cc/cHD1R33n/Pepe2.png",
+      "https://i.postimg.cc/qqzJj7cZ/Pepe3.png",
+      "https://i.postimg.cc/xCjTN5XQ/Pepe4.png",
+      "https://i.postimg.cc/3NVK6Hnr/Pepe5.png",
+      "https://i.postimg.cc/05B2rpPg/Pepe6.png"
+    ],
+    size: 1.0,
+    spinSpeed: 200,
+    pairId: "8Lvqv2jgNvcx1NDtMHd5Ahx8ZUjETfLwygq9MtDfPHxe",
+    supply: 999826244
+    }
   ];
 
-  // Per-character fine-tune multipliers (you can tweak these if a character looks too big/small)
+  // Per-character fine-tune multipliers
   const characterScaleTweaks = {
     Billie: 0.78,
     Bagz: 0.78,
@@ -278,12 +308,11 @@
     Anon: 0.78
   };
 
-  // ===== State =====
+  // ===== State & DOM =====
   let currentCharIndex = 0;
   let currentFrame = 0;
   let intervalId;
 
-  // ===== DOM =====
   const $character = document.getElementById("character");
   const $turnBtn = document.getElementById("turnBtn");
   const $effectBtn = document.getElementById("effectBtn");
@@ -292,9 +321,10 @@
   const $nextChar = document.getElementById("nextChar");
   const $charName = document.getElementById("charName");
   const $priceContainer = document.getElementById("priceContainer");
+  const $characterImg = document.getElementById("character");
 
-  // ===== Preload frames =====
-  characters.forEach(char => char.frames.forEach(src => { const img = new Image(); img.src = src; }));
+  // Preload frames
+  characters.forEach(ch => ch.frames.forEach(src => { const img = new Image(); img.src = src; }));
 
   function getViewportScale(){
     const w = window.innerWidth;
@@ -307,12 +337,13 @@
   function setCharacter(){
     const ch = characters[currentCharIndex];
     currentFrame = 0;
-    $character.src = ch.frames[currentFrame];
+    const imgEl = document.getElementById('character');
+    imgEl.src = ch.frames[currentFrame];
 
-    // compute effective char size (character's own size * tweak * viewport scale * global shrink)
     const tweak = characterScaleTweaks[ch.name] ?? 0.78;
     const effective = ch.size * tweak * getViewportScale();
-    $character.style.setProperty('--char-size', effective);
+    imgEl.style.setProperty('--char-size', effective);
+    // keep CSS-driven width: the #character img uses that custom property
 
     const title = FORCE_UPPERCASE ? ch.name.toUpperCase() : ch.name;
     $charName.textContent = title;
@@ -329,7 +360,7 @@
   }
 
   async function updatePrice(ch){
-    if(!ch.pairId){ $priceContainer.innerText = "Price unavailable"; return; }
+    if(!ch.pairId){ $priceContainer.textContent = "Price unavailable"; return; }
     try{
       const res = await fetch(`https://api.dexscreener.com/latest/dex/pairs/solana/${ch.pairId}`);
       const data = await res.json();
@@ -337,10 +368,10 @@
       const priceStr = price.toFixed(6);
       const mcap = ch.supply ? (ch.supply * price) : 0;
       const mcapStr = mcap.toLocaleString(undefined,{ maximumFractionDigits: 0 });
-      $priceContainer.innerHTML = `Price: $${priceStr} | MCAP: $${mcapStr}`;
+      $priceContainer.textContent = `Price: $${priceStr} | MCAP: $${mcapStr}`;
     } catch(err){
       console.error(err);
-      $priceContainer.innerText = "Price unavailable";
+      $priceContainer.textContent = "Price unavailable";
     }
   }
 
@@ -348,7 +379,7 @@
   function nextFrame(){
     const ch = characters[currentCharIndex];
     currentFrame = (currentFrame + 1) % ch.frames.length;
-    $character.src = ch.frames[currentFrame];
+    document.getElementById('character').src = ch.frames[currentFrame];
   }
   function startSpin(){
     const ch = characters[currentCharIndex];
@@ -362,72 +393,209 @@
   window.addEventListener('pointerup', stopSpin);
   $turnBtn.addEventListener('pointerleave', stopSpin);
 
-  // ===== Glow toggle =====
-  $effectBtn.addEventListener('click', ()=> $character.classList.toggle('glow'));
+  // Glow toggle
+  $effectBtn.addEventListener('click', ()=> document.getElementById('character').classList.toggle('glow'));
 
-  // ===== Background color cycling =====
-  const hues = ["#a25647", "#4a90e2", "#f5a623", "#7ed321", "#9b59b6"];
+  // Background color cycling
+  const hues = ["#a25647", "#4a90e2", "#f5a623", "#7ed321", "#9b59b6",'#000000'];
   let hueIndex = 0;
   $paintBtn.addEventListener('click', ()=>{ hueIndex = (hueIndex + 1) % hues.length; document.documentElement.style.setProperty('--bg-base', hues[hueIndex]); });
 
-  // ===== Character navigation =====
+  // Character navigation
   $prevChar.addEventListener('click', ()=>{ currentCharIndex = (currentCharIndex - 1 + characters.length) % characters.length; setCharacter(); });
   $nextChar.addEventListener('click', ()=>{ currentCharIndex = (currentCharIndex + 1) % characters.length; setCharacter(); });
 
-  // ===== SNOW EFFECT =====
-  const canvas = document.getElementById('snowCanvas');
-  const ctx = canvas.getContext('2d');
-  let width = window.innerWidth; let height = window.innerHeight;
-  function sizeCanvas(){ width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; }
-  sizeCanvas();
+  // ===== PARTICLE EFFECTS (snow / blood / candles / matrix) =====
+const particleCanvas = document.getElementById('particleCanvas');
+const pctx = particleCanvas.getContext('2d');
 
-  const numFlakes = 120; const flakes = [];
-  function createFlakes(){ flakes.length = 0; for(let i=0;i<numFlakes;i++){ flakes.push({ x: Math.random()*width, y: Math.random()*height, radius: Math.random()*3+1, speed: Math.random()*1.5+0.5, drift: Math.random()*1.5-0.75, opacity: Math.random()*0.8+0.2 }); } }
-  function drawFlakes(){ ctx.clearRect(0,0,width,height); ctx.beginPath(); for(const f of flakes){ ctx.globalAlpha = f.opacity; ctx.moveTo(f.x,f.y); ctx.arc(f.x,f.y,f.radius,0,Math.PI*2); } ctx.fillStyle = '#fff'; ctx.fill(); ctx.globalAlpha = 1; }
-  function updateFlakes(){ for(const f of flakes){ f.y += f.speed; f.x += f.drift; if(f.y>height){ f.y = 0; f.x = Math.random()*width; } if(f.x>width) f.x = 0; if(f.x<0) f.x = width; } }
-  let rafId;
-  function animate(){ drawFlakes(); updateFlakes(); rafId = requestAnimationFrame(animate); }
+function sizeParticleCanvas(){
+  particleCanvas.width = window.innerWidth;
+  particleCanvas.height = window.innerHeight;
+}
+sizeParticleCanvas();
 
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  function applyMotionPref(){ if(reduceMotion.matches){ cancelAnimationFrame(rafId); drawFlakes(); } else { cancelAnimationFrame(rafId); animate(); } }
-  reduceMotion.addEventListener?.('change', applyMotionPref);
-  window.addEventListener('resize', ()=>{ sizeCanvas(); createFlakes(); updateCharSize(); });
+let particles = [];
+let effectMode = 1; // 0=off, 1=snow, 2=blood, 3=candles, 4=matrix
+const effectIcons = ["⭕","❄️","🩸","🕯️","💚"];
+const effectToggleBtn = document.getElementById('effectToggle');
+effectToggleBtn.textContent = effectIcons[effectMode];
+
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+// ===== MATRIX CHARACTERS & CONFIG =====
+const japaneseChars = "アカサタナハマヤラワイキシチニヒミリウエケセテネヘメレオコソトノホモヨロヲ0123456789";
+const matrixSpeed = 20;    // pixels per frame
+const colSpacing = 22;     // horizontal spacing between columns
+const lineSpacing = 19;    // font size / vertical spacing
+const fade = 0.1;          // trail fade
+let matrixColumns = [];
+
+function randomJapaneseChar() {
+  return japaneseChars.charAt(Math.floor(Math.random() * japaneseChars.length));
+}
+
+function initMatrix() {
+  matrixColumns = [];
+  const colCount = Math.floor(particleCanvas.width / colSpacing);
+  for(let i = 0; i < colCount; i++) {
+    matrixColumns[i] = Math.random() * particleCanvas.height;
+  }
+}
+
+// ===== SPAWN OTHER PARTICLES =====
+function spawnParticle() {
+  if(reduceMotion.matches) return;
+
+  if(effectMode === 1){ // snow
+    if(particles.length < 160){
+      particles.push({
+        t: 'snow',
+        x: Math.random() * particleCanvas.width,
+        y: -10 - Math.random()*20,
+        r: 1.5 + Math.random()*3,
+        vx: (Math.random()*1.4 - 0.7),
+        vy: 0.6 + Math.random()*1.6,
+        o: 0.4 + Math.random()*0.6
+      });
+    }
+  } else if(effectMode === 2){ // blood
+    if(particles.length < 60){
+      particles.push({
+        t: 'blood',
+        x: Math.random() * particleCanvas.width,
+        y: -20 - Math.random()*40,
+        r: 2 + Math.random()*3,
+        vx: (Math.random()*0.4 - 0.2),
+        vy: 2 + Math.random()*2,
+        o: 0.8
+      });
+    }
+  } else if(effectMode === 3){ // candles
+    if(particles.length < 90){
+      particles.push({
+        t: 'candle',
+        x: Math.random() * particleCanvas.width,
+        y: particleCanvas.height + (10 + Math.random()*30),
+        w: 2 + Math.random()*8,
+        h: 20 + Math.random()*90,
+        vy: -(2 + Math.random()*3),
+        o: 0.6 + Math.random()*0.4,
+        glow: Math.random()*0.6 + 0.2
+      });
+    }
+  }
+}
+
+// ===== DRAW PARTICLES & MATRIX =====
+function drawParticles(){
+  if(effectMode === 4){ // MATRIX
+    pctx.fillStyle = `rgba(0,0,0,${fade})`;
+    pctx.fillRect(0,0,particleCanvas.width,particleCanvas.height);
+
+    pctx.fillStyle = '#0F0';
+    pctx.font = `${lineSpacing}px monospace`;
+
+    for(let i=0; i<matrixColumns.length; i++){
+      const char = randomJapaneseChar();
+      const x = i * colSpacing;
+      const y = matrixColumns[i];
+      pctx.fillText(char, x, y);
+      matrixColumns[i] += matrixSpeed;
+      if(matrixColumns[i] > particleCanvas.height) matrixColumns[i] = 0;
+    }
+    return;
+  }
+
+  pctx.clearRect(0,0,particleCanvas.width, particleCanvas.height);
+  for(let i = particles.length - 1; i >= 0; i--){
+    const p = particles[i];
+    if(p.t === 'snow'){
+      pctx.globalAlpha = p.o;
+      pctx.fillStyle = '#fff';
+      pctx.beginPath();
+      pctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      pctx.fill();
+      p.x += p.vx;
+      p.y += p.vy;
+      if(p.x > particleCanvas.width) p.x = 0;
+      if(p.x < 0) p.x = particleCanvas.width;
+      if(p.y > particleCanvas.height + 40) particles.splice(i,1);
+    } else if(p.t === 'blood'){
+      pctx.globalAlpha = p.o;
+      pctx.fillStyle = 'rgba(200,0,0,1)';
+      pctx.beginPath();
+      pctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      pctx.fill();
+      if(p.y + p.r >= particleCanvas.height - 2){
+        const splashCount = 2 + Math.floor(Math.random()*3);
+        for(let s=0;s<splashCount;s++){
+          const sx = p.x + (Math.random()*p.r*2 - p.r);
+          const sy = particleCanvas.height - 2 + Math.random()*3;
+          const sr = Math.random()*p.r*0.6 + 1;
+          pctx.beginPath();
+          pctx.arc(sx, sy, sr, 0, Math.PI*2);
+          pctx.fill();
+        }
+      }
+      p.x += p.vx;
+      p.y += p.vy;
+      if(p.y > particleCanvas.height + 40) particles.splice(i,1);
+    } else if(p.t === 'candle'){
+      pctx.globalAlpha = p.o;
+      const x = p.x - p.w/2;
+      pctx.fillStyle = 'rgba(0,220,80,1)';
+      pctx.fillRect(x, p.y, p.w, -p.h);
+      pctx.globalAlpha = 0.12 * p.glow;
+      pctx.fillStyle = 'rgba(0,255,120,1)';
+      pctx.fillRect(x - p.w, p.y - p.h - 6, p.w*3, 6);
+      p.y += p.vy;
+      if(p.y + p.h < -40) particles.splice(i,1);
+    }
+  }
+  pctx.globalAlpha = 1;
+}
+
+let particleRAF;
+function particleLoop(){
+  if(effectMode !== 0) spawnParticle();
+  drawParticles();
+  particleRAF = requestAnimationFrame(particleLoop);
+}
+particleLoop();
+
+// ===== EFFECT TOGGLE =====
+effectToggleBtn.addEventListener('click', () => {
+  effectMode = (effectMode + 1) % 5;
+  effectToggleBtn.textContent = effectIcons[effectMode];
+  particles = [];
+  if(effectMode === 4) initMatrix();
+});
+
+window.addEventListener('resize', () => {
+  sizeParticleCanvas();
+  if(effectMode === 4) initMatrix();
+});
+
+reduceMotion.addEventListener?.('change', () => {
+  if(reduceMotion.matches){
+    effectMode = 0;
+    effectToggleBtn.textContent = effectIcons[effectMode];
+    particles = [];
+  }
+});
+
+// INIT MATRIX ON START
+if(effectMode === 4) initMatrix();
+
+
 
   // helper to update char size on resize
-  function updateCharSize(){ const ch = characters[currentCharIndex]; const tweak = characterScaleTweaks[ch.name] ?? 0.78; const effective = ch.size * tweak * getViewportScale(); $character.style.setProperty('--char-size', effective); }
+  function updateCharSize(){ const ch = characters[currentCharIndex]; const tweak = characterScaleTweaks[ch.name] ?? 0.78; const effective = ch.size * tweak * getViewportScale(); document.getElementById('character').style.setProperty('--char-size', effective); }
 
   // ===== Init =====
-  createFlakes(); applyMotionPref(); setCharacter();
+  setCharacter();
+  // Note: particleLoop already started
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
