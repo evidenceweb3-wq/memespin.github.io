@@ -70,6 +70,24 @@
   text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
 }
 
+  /* 📱 Mobile (up to 600px) */
+@media (max-width: 600px) {
+  #change24h {
+    top: 220px;   /* adjust manually for mobile */
+    left: 50%;    /* center it better on small screens */
+    font-size: 1em; /* maybe make it a bit bigger */
+  }
+}
+
+/* 💻 Desktop (601px and above) */
+@media (min-width: 601px) {
+  #change24h {
+    top: 480px;   /* adjust manually for desktop */
+    left: 70%;    /* keep it offset if you want */
+    font-size: 0.9em;
+  }
+}
+
   /* Character centered area */
   #characterWrap{ position: fixed; inset: var(--safe-top) 0 var(--safe-bottom) 0; display:grid; place-items:center; z-index:6; pointer-events:none }
   #character{ max-width: calc(var(--char-base)); max-height:100%; width: calc(var(--char-base) * var(--char-size, 1)); height:auto; object-fit:contain; transition: transform .22s ease, filter .22s ease; pointer-events:auto }
@@ -660,5 +678,6 @@ if(effectMode === 4) initMatrix();
 </script>
 </body>
 </html>
+
 
 
