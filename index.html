@@ -58,6 +58,13 @@
     text-overflow: ellipsis;
     max-width: 78vw;              /* avoid excessively long text overflowing viewport */
   }
+
+  /* 🔹 Make title bigger only on mobile */
+@media (max-width: 767px) {
+  #charName {
+    font-size: calc(var(--title-size) * 2.3); /* adjust multiplier as needed */
+  }
+}
   
   /* NEW: 24h change under price */
   #change24h {
@@ -678,6 +685,7 @@ if(effectMode === 4) initMatrix();
 </script>
 </body>
 </html>
+
 
 
 
