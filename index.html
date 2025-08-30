@@ -58,6 +58,8 @@
     text-overflow: ellipsis;
     max-width: 78vw;              /* avoid excessively long text overflowing viewport */
   }
+  
+  
 
   /* 🔹 Make title bigger only on mobile */
 @media (max-width: 767px) {
@@ -195,6 +197,24 @@
   @keyframes pulse{ 0%,100%{ text-shadow:0 0 8px rgba(255,255,255,.5)} 50%{ text-shadow:0 0 20px rgba(255,255,255,1)} }
 
   @media (prefers-reduced-motion: reduce){ .effect-rainbow,.effect-flicker,.effect-glitch,.effect-shadowPulse{ animation:none !important } }
+
+/* === Social Links Section === */
+#socialLinks {
+  margin-top: 10px;
+  text-align: center;
+}
+
+#socialLinks img {
+  width: 28px;
+  height: 28px;
+  margin: 0 8px;
+  filter: drop-shadow(0 0 4px rgba(0,0,0,0.5));
+  transition: transform 0.2s ease;
+}
+
+#socialLinks img:hover {
+  transform: scale(1.2);
+}
 </style>
 </head>
 <body>
@@ -218,6 +238,15 @@
   <div id="characterWrap">
     <img id="character" src="" alt="Character" />
   </div>
+  
+  <div id="socialLinks">
+  <a id="socialX" href="#" target="_blank" title="X / Twitter">
+    <img src="https://i.postimg.cc/jSSK7CPW/XICON.png" alt="X Icon" width="28" height="28" />
+  </a>
+  <a id="socialWeb" href="#" target="_blank" title="Website">
+    <img src="https://i.postimg.cc/3xfhC7Ft/WICON.png" alt="Website Icon" width="28" height="28" />
+  </a>
+</div>
 
   <!-- Left stacked controls under left arrow (emoji-only) -->
   <div class="leftControls" role="group" aria-label="Character controls">
@@ -244,14 +273,18 @@
       "https://i.postimg.cc/654021C9/TresRe.png",
       "https://i.postimg.cc/cLqcQMcf/CuatroRe.png",
       "https://i.postimg.cc/YC1z8GXZ/CincoRe.png"
-    ], size: 1.05, spinSpeed: 230, pairId:"GNEqyxGV9u8Hz5G3RX1VxUfWCQFuXEP2ckmbLxe1bmyf", supply: 999940952 },
+    ], size: 1.05, spinSpeed: 230, pairId:"GNEqyxGV9u8Hz5G3RX1VxUfWCQFuXEP2ckmbLxe1bmyf", supply: 999940952,
+     x: "https://x.com/juujuumama",        // <-- add X link here
+    website: "https://www.billietheblueyeti.com/"},
 
     { name: "Bagz", frames: [
       "https://i.postimg.cc/76DxBpz7/Bagz1.png",
       "https://i.postimg.cc/Qd2N7Bxf/Bagz2.png",
       "https://i.postimg.cc/fRtTk7Z3/Bagz3.png",
       "https://i.postimg.cc/QMc8JXFh/Bagz4.png",
-    ], size: 1.0, spinSpeed: 220, pairId: "4MzZA4pqd7HqU9gQKuLSwtC5nUxFpmw5PvRmGoSGMNxF", supply: 1000000000 },
+    ], size: 1.0, spinSpeed: 220, pairId: "4MzZA4pqd7HqU9gQKuLSwtC5nUxFpmw5PvRmGoSGMNxF", supply: 1000000000,
+     x: "https://x.com/BagzBunnies",        // <-- add X link here
+    website: "https://bagz.world/"},
 
     { name: "Finn", frames: [
       "https://i.postimg.cc/nLyzPYHZ/FinnUNO.png",
@@ -262,7 +295,9 @@
       "https://i.postimg.cc/13zfn3Cx/FINNSEIS.png",
       "https://i.postimg.cc/yYpSTRS6/FINNSIETE.png",
       "https://i.postimg.cc/prYp8hMv/FINNOCHO.png"
-    ], size: 0.90, spinSpeed: 210, pairId:"3kZxw7r663dNYqbw8zGCK7NRrcBMXMcRnv3heak4F7mC", supply: 985377686 },
+    ], size: 0.90, spinSpeed: 210, pairId:"3kZxw7r663dNYqbw8zGCK7NRrcBMXMcRnv3heak4F7mC", supply: 985377686,
+     x: "https://x.com/FinnOnBagsApp",        // <-- add X link here
+    website: ""},
 
     { name: "Nippie", frames: [
       "https://i.postimg.cc/5y4Zq3Pn/NIPPIE1.png",
@@ -271,7 +306,9 @@
       "https://i.postimg.cc/wMwnWmZH/NIPPIE4.png",
       "https://i.postimg.cc/T2Q82zwS/NIPPIE5.png",
       "https://i.postimg.cc/kX502TR5/NIPPIE6.png"
-    ], size: 0.90, spinSpeed: 220, pairId:"ENYbntd3KgJJJvMqbe5Awtqu8jkVjnczU8TK46q3odnG", supply: 954759985 },
+    ], size: 0.90, spinSpeed: 220, pairId:"ENYbntd3KgJJJvMqbe5Awtqu8jkVjnczU8TK46q3odnG", supply: 954759985,
+     x: "https://x.com/TheNippies",        // <-- add X link here
+    website: "https://nippi.es/"},
 
     { name: "Anon", frames: [
       "https://i.postimg.cc/yYZPj0zX/Anon1.png",
@@ -283,7 +320,9 @@
       "https://i.postimg.cc/zf0Svjn5/Anon6.png",
       "https://i.postimg.cc/d0qjJXZ4/Anon7.png",
       "https://i.postimg.cc/FHfmBm43/Anon8.png"
-    ], size: 0.80, spinSpeed: 220, pairId:"8eQTQLnBmEgeY9avVjrqqgX8ZVr8MRFrXEHpMrx6DGff", supply: 1000000000 },
+    ], size: 0.80, spinSpeed: 220, pairId:"8eQTQLnBmEgeY9avVjrqqgX8ZVr8MRFrXEHpMrx6DGff", supply: 1000000000,
+     x: "https://x.com/i/communities/1954607470753861824",        // <-- add X link here
+    website: ""},
 
     { name: "NYAN", frames: [
       "https://i.postimg.cc/mDjqJvGF/frame-00-delay-0-07s.gif",
@@ -302,8 +341,9 @@
     size: 1.0,
     spinSpeed: 100,
     pairId: "3BfzLnxHVaYJNrAP6SxfT7Z8nFe5ybKL6JMTuCrNR8zZ",
-    supply: 999974598
-    },
+    supply: 999974598,
+     x: "https://x.com/NyanCatOnBAGS",        // <-- add X link here
+    website: "https://nyancoin.io/"},
 
     { name: "Orynth", frames: [
       "https://i.postimg.cc/q7Qn6rVR/Orynth1.png",
@@ -318,8 +358,9 @@
     size: 1.0,
     spinSpeed: 120,
     pairId: "C53QBLiDTYhQEgsHKQDS4kEAwEKty1nDkYxF6w67dvBh",
-    supply: 999987590
-    },
+    supply: 999987590,
+     x: "https://x.com/orynthai",        // <-- add X link here
+    website: "https://www.orynth.dev/"},
 
     { name: "PEPE", frames: [
       "https://i.postimg.cc/3wFxwVJ9/Pepe1.png",
@@ -332,8 +373,9 @@
     size: 1.0,
     spinSpeed: 200,
     pairId: "8Lvqv2jgNvcx1NDtMHd5Ahx8ZUjETfLwygq9MtDfPHxe",
-    supply: 999826244
-    },
+    supply: 999826244,
+     x: "https://x.com/PepeOnBAGS_",        // <-- add X link here
+    website: "https://x.com/i/communities/1953556908318818730"},
 
     {
   name: "HAT", // NEW CHARACTER NAME
@@ -347,8 +389,9 @@
   size: 1.0,               // scale multiplier
   spinSpeed: 200,          // milliseconds per frame
   pairId: "3HP2Gg5sTaNta2ztzrRCA63btYSeyptASkGLcyQXWfBU", // replace with actual DexScreener pair ID
-  supply: 978965646       // total supply for market cap calculation
-},
+  supply: 978965646,
+      x: "https://x.com/i/communities/1953347503736443163",        // <-- add X link here
+    website: ""},
 
     {
   name: "LAMBO", // NEW CHARACTER NAME
@@ -358,8 +401,9 @@
   size: 1.25,               // scale multiplier
   spinSpeed: 200,          // milliseconds per frame
   pairId: "DDizsNbsgwgX3icRb6JQ8vFrRa5cN5Nuj6u63dRAoDQv", // replace with actual DexScreener pair ID
-  supply: 999915202       // total supply for market cap calculation
-}
+  supply: 999915202,
+      x: "https://x.com/i/communities/1956762307033477526",        // <-- add X link here
+    website: ""},
   ];
 
   // Per-character fine-tune multipliers
@@ -407,7 +451,6 @@
     const tweak = characterScaleTweaks[ch.name] ?? 0.78;
     const effective = ch.size * tweak * getViewportScale();
     imgEl.style.setProperty('--char-size', effective);
-    // keep CSS-driven width: the #character img uses that custom property
 
     const title = FORCE_UPPERCASE ? ch.name.toUpperCase() : ch.name;
     $charName.textContent = title;
@@ -420,8 +463,26 @@
       $charName.className = '';
     }
 
+    // === Update Social Links ===
+    const xLink = document.getElementById("socialX");
+    const webLink = document.getElementById("socialWeb");
+
+    if (ch.x) {
+      xLink.href = ch.x;
+      xLink.style.display = "inline-block";
+    } else {
+      xLink.style.display = "none";
+    }
+
+    if (ch.website) {
+      webLink.href = ch.website;
+      webLink.style.display = "inline-block";
+    } else {
+      webLink.style.display = "none";
+    }
+
     updatePrice(ch);
-  }
+}
 
   async function updatePrice(ch) {
   const changeEl = document.getElementById('change24h');
@@ -696,17 +757,3 @@ if(effectMode === 4) initMatrix();
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
