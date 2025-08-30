@@ -198,18 +198,23 @@
 
   @media (prefers-reduced-motion: reduce){ .effect-rainbow,.effect-flicker,.effect-glitch,.effect-shadowPulse{ animation:none !important } }
 
-/* === Social Links Section === */
+/* === Social Links Floating Above Everything (Centered) === */
 #socialLinks {
-  margin-top: 10px;
-  text-align: center;
+  position: fixed;       /* float above all content */
+  top: 550px;           /* distance from top of viewport */
+  left: 50%;             /* start at 50% of viewport width */
+  transform: translateX(-50%); /* center horizontally */
+  display: flex;
+  gap: 12px;             /* space between icons */
+  z-index: 9999;         /* ensures it’s above everything */
 }
 
 #socialLinks img {
   width: 28px;
   height: 28px;
-  margin: 0 8px;
   filter: drop-shadow(0 0 4px rgba(0,0,0,0.5));
   transition: transform 0.2s ease;
+  cursor: pointer;
 }
 
 #socialLinks img:hover {
@@ -757,3 +762,4 @@ if(effectMode === 4) initMatrix();
 </script>
 </body>
 </html>
+
